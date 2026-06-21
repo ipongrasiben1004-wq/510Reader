@@ -117,7 +117,7 @@
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
                         </button>
                         <button onclick="scrollShelf('right')" class="p-2 bg-white hover:bg-slate-100 text-slate-600 rounded-full shadow-sm border border-slate-200 transition">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></svg>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
                         </button>
                         <div class="text-xs text-slate-500 pl-2">共 <span id="novelCount">0</span> 本</div>
                     </div>
@@ -143,7 +143,7 @@
         </section>
 
         <!-- ==================== 頁面 2：小說閱讀器 (Reader) ==================== -->
-        <section id="page-reader" class="hidden max-w-4xl mx-auto space-y-4">
+        <section id="page-reader" class="hidden max-w-4xl mx-auto space-y-6">
             <!-- 返回與設定工具列 -->
             <div class="flex items-center justify-between bg-white px-4 py-3 rounded-xl shadow-sm border border-slate-100">
                 <button onclick="navigateTo('home')" class="text-slate-600 hover:text-indigo-600 text-sm font-semibold flex items-center space-x-1">
@@ -163,7 +163,8 @@
                 </div>
             </div>
 
-            <div id="readerBox" class="bg-white p-6 md:p-10 rounded-2xl shadow-sm border border-slate-100 min-h-[500px] flex flex-col justify-between transition-all duration-200">
+            <!-- 閱讀器正文區 -->
+            <div id="readerBox" class="bg-white p-6 md:p-10 rounded-2xl shadow-sm border border-slate-100 min-h-[400px] flex flex-col justify-between transition-all duration-200">
                 <div class="space-y-6">
                     <div class="border-b border-slate-200/60 pb-4">
                         <div class="text-xs text-indigo-600 font-semibold tracking-wider uppercase mb-1" id="readerNovelName">載入中...</div>
@@ -171,7 +172,7 @@
                     </div>
 
                     <!-- 章節文字 -->
-                    <article id="readerContent" class="text-lg leading-relaxed text-slate-700 whitespace-pre-wrap min-h-[300px] font-serif">
+                    <article id="readerContent" class="text-lg leading-relaxed text-slate-700 whitespace-pre-wrap min-h-[250px] font-serif">
                         正在取得章節內容，請稍候...
                     </article>
                 </div>
@@ -187,6 +188,55 @@
                     <button id="nextChapterBtn" onclick="nextChapter()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition">
                         下一章
                     </button>
+                </div>
+            </div>
+
+            <!-- 💬 新增：讀者評論與留言互動模組 -->
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100 space-y-6">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                    <h3 class="text-lg font-bold text-slate-800 flex items-center space-x-2">
+                        <span>💬</span> <span>讀者交流評論區</span>
+                    </h3>
+                    <span class="text-xs text-slate-400" id="commentCountLabel">0 則留言</span>
+                </div>
+
+                <!-- 留言輸入區表單 -->
+                <div id="commentFormArea" class="space-y-3">
+                    <div id="commentBoxPlaceholder" class="hidden p-4 bg-slate-50 border border-slate-200 rounded-xl text-center text-sm">
+                        <span>請先</span>
+                        <button onclick="openLoginModal()" class="text-indigo-600 font-bold hover:underline mx-1">登入帳號</button>
+                        <span>以發表您對本章節的讀後感！</span>
+                    </div>
+
+                    <div id="commentBoxForm" class="space-y-3">
+                        <div class="flex items-center justify-between text-xs font-semibold text-slate-500">
+                            <span id="commentUserBadge" class="text-indigo-600 font-bold">您將以 讀者 身分發言</span>
+                            <span id="commentCharLimitLabel">普通讀者限 30 字內</span>
+                        </div>
+                        <textarea id="newCommentContent" rows="3" oninput="handleCommentInput(this)" class="w-full p-3 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="寫下您對本章節的看法..."></textarea>
+                        
+                        <!-- 附帶多媒體連結區 (讀者以外身分限定顯示) -->
+                        <div id="commentMediaContainer" class="hidden p-3 bg-indigo-50/50 rounded-xl border border-indigo-100/50 space-y-2">
+                            <div class="text-xs font-bold text-indigo-700 flex justify-between items-center">
+                                <span>📎 附加多媒體網址 (圖片或影片，最多 5 個)</span>
+                                <button onclick="addMediaInputRow()" class="text-xs bg-indigo-600 hover:bg-indigo-700 text-white px-2 py-0.5 rounded font-bold transition">+ 增加網址</button>
+                            </div>
+                            <div id="mediaUrlsList" class="space-y-1.5">
+                                <!-- 動態生成輸入欄位 -->
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end">
+                            <button onclick="submitChapterComment()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-md transition transform active:scale-95">
+                                🚀 發布評論
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 評論清單 -->
+                <div id="commentsList" class="space-y-4 pt-4 border-t border-slate-100 max-h-[500px] overflow-y-auto no-scrollbar">
+                    <!-- 動態渲染讀者評論 -->
                 </div>
             </div>
         </section>
@@ -207,7 +257,6 @@
                 <button onclick="switchAdminTab('novels')" id="tabBtn-novels" class="px-4 py-2 text-sm font-semibold border-b-2 border-indigo-600 text-indigo-600 whitespace-nowrap">📚 小說管理</button>
                 <button onclick="switchAdminTab('chapters')" id="tabBtn-chapters" class="px-4 py-2 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap">📝 章節編排</button>
                 <button onclick="switchAdminTab('settings')" id="tabBtn-settings" class="px-4 py-2 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap">🔔 頻道與系統設定</button>
-                <!-- 創辦者 ReadingMaker 專屬身分管理分頁標籤 -->
                 <button onclick="switchAdminTab('users')" id="tabBtn-users" class="hidden px-4 py-2 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap">👥 身分與權限管理</button>
             </div>
 
@@ -677,6 +726,43 @@
         <button onclick="hideToast()" class="text-slate-400 hover:text-slate-600">✕</button>
     </div>
 
+    <!-- ==================== 📝 新增：作品快速編輯 Modal 彈窗 ==================== -->
+    <div id="editNovelModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden relative border border-slate-100 flex flex-col animate-scale-up">
+            <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-4 flex justify-between items-center shrink-0">
+                <h2 class="text-lg font-bold text-white flex items-center space-x-2">
+                    <span>📝</span> <span>編輯作品資訊</span>
+                </h2>
+                <button onclick="closeEditNovelModal()" class="text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-1.5 rounded-lg transition">✕</button>
+            </div>
+            
+            <div class="p-6 space-y-4 overflow-y-auto max-h-[75vh] no-scrollbar">
+                <input type="hidden" id="editNovelId">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">小說書名</label>
+                    <input id="editNovelTitle" type="text" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">作者筆名</label>
+                    <input id="editNovelAuthor" type="text" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">封面 Emoji</label>
+                    <input id="editNovelCover" type="text" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">小說大綱與介紹說明</label>
+                    <textarea id="editNovelDesc" rows="4" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                </div>
+            </div>
+
+            <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end space-x-2 shrink-0">
+                <button onclick="closeEditNovelModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold text-sm px-4 py-2 rounded-xl transition">取消</button>
+                <button onclick="saveEditNovelData()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm px-5 py-2 rounded-xl shadow-md transition transform active:scale-95">💾 保存修改</button>
+            </div>
+        </div>
+    </div>
+
     <!-- ==================== 核心 JavaScript 處理代碼 ==================== -->
     <script>
         const defaultNovels = [
@@ -705,7 +791,7 @@
                     {
                         id: "chap-510-4",
                         title: "第四章：外套風波與這就是 510！",
-                        content: "起身後，旁邊的宋家和眼神突然瞄到教室中央。曹棋棋跟葉筳榆正靠在一起聊天（耍gay 內心:沒事）。宋家和立刻撥了撥瀏海，開啟「耍帥模式」大步走過去。\n\n宋家和（直接湊到曹棋棋邊，故意壓低聲音）：\n「棋棋姐姐，借我課本……」\n\n話還沒說完，宋家和居然直接伸手拿起曹棋棋掛在椅子上的外套，當著大家的面直接穿了上去！\n\n周圍的男生瞬間爆出雷鳴般的起鬨聲：\n「喔————！！又來了！宋家和又在穿她外套了ㄟ！帥喔!（誤）」\n\n曹棋棋（站在旁邊，滿臉無語）：\n「宋家和！！！你不要又穿我外套好不好，我都洗過很多件了……」\n\n許晞本（在旁邊三八步，再度露出怪北北的表情）：\n「宋家和，你好像把她穿過的都穿了，而且她說這件好像是她姊的QQ。」\n\n葉筳榆（也著曹棋棋一起翻白眼，無奈地說）：\n「宋家和，全班都知道你喜歡她啦！但你真的很噁欸，上次你體育課喝她水壺，她還沒管你欸！」\n\n宋家和完全沒有要理葉筳榆的意思，當作沒聽到，自顧自的跑去找其他男生聊天了。\n\n\n【尾聲：這就是510！】\n\n午後金黃色的夕陽斜斜地照進新北市中和區復興國小五年 10 班 of 窗戶。\n\n這就是屬於這群朋友們最真實、最精彩的日常——有連勝和落敗的電競恩怨、有怪北北的關心眼神、有不小心在黑板上留下的記號、有五分鐘神速吃完的午餐，還有那個全班皆知、每天樂此不疲的外套大八卦。\n\n（全劇終）"
+                        content: "起身後，旁邊的宋家和眼神突然瞄到教室中央。曹棋棋跟葉筳榆正靠在一起聊天（耍gay 內心:沒事）。宋家和立刻撥了撥瀏海，開啟「耍帥模式」大步走過去。\n\n宋家和（直接湊到曹棋棋邊，故意壓低聲音）：\n「棋棋姐姐，借我課本……」\n\n話還沒說完，宋家和居然直接伸手拿起曹棋棋掛在椅子上的外套，當著大家的面直接穿了上去！\n\n周圍的男生瞬間爆出雷鳴般的起鬨聲：\n「喔————！！又來了！宋家和又在穿她外套了ㄟ！帥喔!（誤）」\n\n曹棋棋（站在旁邊，滿臉無語）：\n「宋家和！！！你不要又穿我外套好不好，我都洗過很多件了……」\n\n許晞本（在旁邊三八步，再度露出怪北北的表情）：\n「宋家和，你好像把她穿過的都穿了，而且她說這件好像是她姊的QQ。」\n\n葉筳榆（也著曹棋棋一起翻白眼，無奈地說）：\n「宋家和，全班都知道你喜歡她啦！但你真的很噁欸，上次你體育課喝她水壺，她還沒管你欸！」\n\n宋家和完全沒有要理葉筳榆的意思，當作沒聽到，自顧自的跑去找其他男生聊天了。\n\n\n【尾聲：這就是510！】\n\n午後金黃色的夕陽斜斜地照進新北市中和區復興國小五年 10 班的窗戶。\n\n這就是屬於這群朋友們最真實、最精彩的日常——有連勝 and 落敗的電競恩怨、有怪北北的關心眼神、有不小心在黑板上留下的記號、有五分鐘神速吃完的午餐，還有那個全班皆知、每天樂此不疲的外套大八卦。\n\n（全劇終）"
                     }
                 ]
             },
@@ -719,7 +805,7 @@
                     {
                         id: "chap-fy-1",
                         title: "第一章：破落少年與鏽劍",
-                        content: "清晨的落葉城下著淅淅瀝瀝的小雨。\n\n林楓抱著那一柄從柴房角落撿來的無名鏽劍，呆呆地坐在台階上。三天前，林家在落葉城一夜之間被仇家所滅，只有他這個被視為修煉廢柴的庶子僥倖從狗洞逃生。\n\n「仙魔兩立，實力為尊...」林楓看著自己雙手因為磨擦而起的血泡，一雙黑眸閃爍著冰冷儲定、堅定的光芒。\n\n林楓猛然拔出鏽劍，劍身斑駁不堪，甚至連一絲靈力波動都感受不到。然而，當雨水滴落在劍尖的刹那，林楓的心海之中忽然傳來一聲遠古巨獸般的低吟。\n\n『小傢伙，你想要報仇嗎？』一個蒼老而霸道無邊的聲音，自劍身深處轟然響徹 his 識海！"
+                        content: "清晨的落葉城下著淅淅瀝瀝的小雨。\n\n林楓抱著那一柄從柴房角落撿來的無名鏽劍，呆呆地坐在台階上。三天前，林家在落葉城一夜之間被仇家所滅，只有他這個被視為修煉廢柴的庶子僥倖從狗洞逃生。\n\n「仙魔兩立，實力為尊...」林楓看著自己雙手因為磨擦而起的血泡，一雙黑眸閃爍著冰冷儲定、堅定的光芒。\n\n林楓猛然拔出鏽劍，劍身斑駁不堪，甚至連一絲靈力波動都感受不到。然而，當雨水滴落在劍尖的刹那，林楓的心海之中忽然傳來一聲遠古巨獸般的低吟。\n\n『小傢伙，你想要報仇嗎？』一個蒼老而霸道無邊的聲音，自劍身深處轟然響徹他的識海！"
                     }
                 ]
             }
@@ -807,9 +893,9 @@
                 }
                 const resSettings = await runCloudApi("getSettings", {});
                 if (resSettings && resSettings.status === "success" && resSettings.settings) {
-                    // 🛡️ 防罷工核心：強制保留正確的 Database API 與 Email API 網址，絕對不被空資料覆蓋
-                    const savedEmailUrl = resSettings.settings.emailGasUrl || state.systemSettings.emailGasUrl || defaultSystemSettings.emailGasUrl;
-                    const savedGasUrl = resSettings.settings.gasUrl || state.systemSettings.gasUrl || defaultSystemSettings.gasUrl;
+                    // 🛡️ 雙重安全防護鎖：優先保留本機端已被使用者自訂保存的 API 網址，絕對不被雲端傳回的空白設定覆蓋
+                    const savedEmailUrl = state.systemSettings.emailGasUrl || resSettings.settings.emailGasUrl || defaultSystemSettings.emailGasUrl;
+                    const savedGasUrl = state.systemSettings.gasUrl || resSettings.settings.gasUrl || defaultSystemSettings.gasUrl;
 
                     state.systemSettings = { ...state.systemSettings, ...resSettings.settings, emailGasUrl: savedEmailUrl, gasUrl: savedGasUrl };
                     localStorage.setItem('novel_system_settings', JSON.stringify(state.systemSettings));
@@ -818,8 +904,8 @@
             } catch (e) {
                 console.error("雲端資料拉取失敗，降級為本機模式:", e);
             } finally {
+                document.getElementById('cloudSyncStatus').classList.remove('hidden');
                 document.getElementById('cloudSyncStatus').classList.add('hidden');
-                document.getElementById('cloudSyncStatus').classList.remove('flex');
             }
         }
 
@@ -1187,7 +1273,7 @@
         }
         function scrollShelf(dir) { document.getElementById('novelShelf').scrollBy({ left: dir === 'left' ? -340 : 340, behavior: 'smooth' }); }
 
-        // ==================== G. 閱讀器模組 ====================
+        // ==================== G. 閱讀器模組與評論系統 ====================
         function startReading(novelId) {
             const novel = state.novels.find(n => n.id === novelId);
             if (!novel || !novel.chapters || novel.chapters.length === 0) { showAppAlert("即將推出", "此部作品目前尚未新增任何章節！", "📖"); return; }
@@ -1233,6 +1319,9 @@
                     chapterIndex: idx
                 });
             }
+
+            // 載入當前章節留言
+            loadChapterComments();
         }
 
         function prevChapter() {
@@ -1280,109 +1369,264 @@
             }
         }
 
-        // ==================== Z. 會員申請專區 (階級與Email) ====================
-        const tierPerksMap = {
-            "藍貓粉絲": ["✓ 評論小說", "🎁 獲得 666 的吳少騏簽名簽名", "🍪 獲得 迷你燕麥餅 X 1"],
-            "水桶粉絲": ["🤝 成為 wenio0509 的好友", "✨ 獲得 666666 的宋家和簽名", "💖 非常感謝您的支持！"],
-            "帥霖粉絲": ["😎 獲得 okok 的謝易霖簽名", "📖 擁有請求添加全新小說的權力"],
-            "瑋瑋鄰居": ["🏠 非常非常感謝你", "✍️ 可以直接新增小說"],
-            "八卦小孩": ["👑 無庸置疑的最高身分"]
-        };
-        const tierOrder = ["藍貓粉絲", "水桶粉絲", "帥霖粉絲", "瑋瑋鄰居", "八卦小孩"];
-
-        function handleJoinMembershipBtn() {
-            if (!state.currentUser) {
-                showAppAlert("登入提示", "必須登入基本會員才能填寫專屬申請表！", "⚠️");
-                openLoginModal();
+        // ==================== 💬 評論與多媒體留言機制 ====================
+        function handleCommentInput(el) {
+            if (!state.currentUser) return;
+            const isBasicReader = (state.currentUser.role === 'Reader' || state.currentUser.role === 'reader');
+            if (isBasicReader) {
+                if (el.value.length > 30) {
+                    el.value = el.value.substring(0, 30);
+                }
+                document.getElementById('commentCharLimitLabel').innerText = `普通讀者限 30 字內 (目前: ${el.value.length}/30)`;
             } else {
-                document.getElementById('membershipModal').classList.remove('hidden');
-                updateMembershipPerks(); // 初始化選項
+                document.getElementById('commentCharLimitLabel').innerText = `已啟用無限字數多媒體特權`;
             }
         }
 
-        function closeMembershipModal() {
-            document.getElementById('membershipModal').classList.add('hidden');
-        }
+        function updateCommentFormDisplay() {
+            const placeholder = document.getElementById('commentBoxPlaceholder');
+            const form = document.getElementById('commentBoxForm');
+            const mediaContainer = document.getElementById('commentMediaContainer');
+            const charLimitLabel = document.getElementById('commentCharLimitLabel');
 
-        function updateMembershipPerks() {
-            const selectedTier = document.getElementById('memTier').value;
-            const targetIdx = tierOrder.indexOf(selectedTier);
-            const listContainer = document.getElementById('memPerksList');
-            listContainer.innerHTML = '';
-            
-            // 權益疊加：遞迴將當前與更低階的特權都抓取出來
-            for (let i = 0; i <= targetIdx; i++) {
-                const tierName = tierOrder[i];
-                const perks = tierPerksMap[tierName];
-                perks.forEach(perk => {
-                    const li = document.createElement('li');
-                    li.className = "flex items-start space-x-2";
-                    li.innerHTML = `<span class="text-indigo-500 mt-0.5">•</span> <span>${perk}</span>`;
-                    listContainer.appendChild(li);
-                });
+            if (!state.currentUser) {
+                placeholder.classList.remove('hidden');
+                form.classList.add('hidden');
+            } else {
+                placeholder.classList.add('hidden');
+                form.classList.remove('hidden');
+                
+                const nickname = state.currentUser.nickname;
+                const roleChinese = roleTranslationMap[state.currentUser.role] || state.currentUser.role;
+                document.getElementById('commentUserBadge').innerText = `您將以 ${nickname} (${roleChinese}) 身分發言`;
+                
+                const isBasicReader = (state.currentUser.role === 'Reader' || state.currentUser.role === 'reader');
+                if (isBasicReader) {
+                    charLimitLabel.innerText = "普通讀者限 30 字內 (目前: 0/30)";
+                    mediaContainer.classList.add('hidden');
+                    document.getElementById('newCommentContent').maxLength = 30;
+                } else {
+                    charLimitLabel.innerText = "已啟用無限字數多媒體特權";
+                    mediaContainer.classList.remove('hidden');
+                    document.getElementById('newCommentContent').removeAttribute('maxLength');
+                    resetMediaInputArea();
+                }
             }
         }
 
-        async function submitMembershipForm() {
-            const mClass = document.getElementById('memClass').value;
-            const mNum = document.getElementById('memNum').value;
-            const mName = document.getElementById('memName').value;
-            const mTier = document.getElementById('memTier').value;
-            const mReason = document.getElementById('memReason').value;
-            const mCondition = document.getElementById('memCondition').value;
+        function resetMediaInputArea() {
+            document.getElementById('mediaUrlsList').innerHTML = '';
+            addMediaInputRow(); // 預設放一行
+        }
 
-            if (!mClass || !mNum || !mName || !mReason || !mCondition) {
-                showAppAlert("欄位未填", "請將「你是誰」、「為何加入」與「加入條件」填寫完整！", "⚠️");
+        function addMediaInputRow() {
+            const container = document.getElementById('mediaUrlsList');
+            const rowsCount = container.children.length;
+            if (rowsCount >= 5) {
+                showAppAlert("額度已滿", "最多隻能附加 5 個圖片或影片網址！", "⚠️");
+                return;
+            }
+            const div = document.createElement('div');
+            div.className = "flex items-center space-x-2";
+            div.innerHTML = `
+                <input type="url" placeholder="貼上 jpg/png 圖片或 mp4 影片連結..." class="flex-grow p-1.5 border border-slate-200 rounded-lg text-xs focus:ring-1 focus:ring-indigo-500">
+                <button onclick="this.parentElement.remove()" class="text-xs text-rose-500 hover:text-rose-700 font-bold px-1.5 py-1">✕</button>
+            `;
+            container.appendChild(div);
+        }
+
+        function getCommentMediaUrls() {
+            const container = document.getElementById('mediaUrlsList');
+            const inputs = container.querySelectorAll('input[type="url"]');
+            const urls = [];
+            inputs.forEach(input => {
+                const val = input.value.trim();
+                if (val) urls.push(val);
+            });
+            return urls;
+        }
+
+        async function submitChapterComment() {
+            const content = document.getElementById('newCommentContent').value.trim();
+            if (!content) {
+                showAppAlert("空留言", "請先輸入您的評論內容！", "⚠️");
                 return;
             }
 
-            const mailData = {
-                classNum: mClass,
-                studentNum: mNum,
-                studentName: mName,
-                membershipTier: mTier, 
-                joinReason: mReason,
-                joinCondition: mCondition,
-                email: state.currentUser.email
+            const mediaUrls = getCommentMediaUrls();
+            const commentObj = {
+                id: `comment-${Date.now()}`,
+                novelId: state.currentSelectedNovelId,
+                chapterIndex: state.currentSelectedChapterIndex,
+                email: state.currentUser.email,
+                nickname: state.currentUser.nickname,
+                role: state.currentUser.role,
+                content: content,
+                mediaUrls: JSON.stringify(mediaUrls),
+                timestamp: Date.now()
             };
 
-            const emailApiUrl = state.systemSettings.emailGasUrl;
-            
-            if (!emailApiUrl) {
-                showAppAlert("無法寄送", "請先至後台系統設定中填入「Email Apps Script URL」！", "❌");
+            // 讀取/儲存至雲端或本機 LocalStorage
+            let comments = JSON.parse(localStorage.getItem('novel_comments_backup')) || [];
+            comments.push(commentObj);
+            localStorage.setItem('novel_comments_backup', JSON.stringify(comments));
+
+            if (state.systemSettings.gasUrl) {
+                await runCloudApi("saveComment", commentObj);
+            }
+
+            document.getElementById('newCommentContent').value = '';
+            resetMediaInputArea();
+            showToast("📢 評論成功", "您的精彩評論已成功發佈！", "🎉");
+            loadChapterComments();
+        }
+
+        async function loadChapterComments() {
+            updateCommentFormDisplay();
+            const container = document.getElementById('commentsList');
+            container.innerHTML = '<div class="text-xs text-slate-400 text-center py-4">正在載入讀者評論...</div>';
+
+            let currentComments = [];
+            const novelId = state.currentSelectedNovelId;
+            const chapIndex = state.currentSelectedChapterIndex;
+
+            if (state.systemSettings.gasUrl) {
+                const res = await runCloudApi("getComments", { novelId: novelId, chapterIndex: chapIndex });
+                if (res && res.status === "success" && res.comments) {
+                    currentComments = res.comments;
+                } else {
+                    const localBackup = JSON.parse(localStorage.getItem('novel_comments_backup')) || [];
+                    currentComments = localBackup.filter(c => c.novelId === novelId && Number(c.chapterIndex) === Number(chapIndex));
+                }
+            } else {
+                const localBackup = JSON.parse(localStorage.getItem('novel_comments_backup')) || [];
+                currentComments = localBackup.filter(c => c.novelId === novelId && Number(c.chapterIndex) === Number(chapIndex));
+            }
+
+            container.innerHTML = '';
+            document.getElementById('commentCountLabel').innerText = `${currentComments.length} 則留言`;
+
+            if (currentComments.length === 0) {
+                container.innerHTML = '<div class="text-xs text-slate-400 text-center py-6">目前暫無讀者評論，快來搶沙發！🛋️</div>';
                 return;
             }
 
-            try {
-                // 🛠️ 根據您的分析修復：移除 'mode: 'no-cors'，允許正常連線、解析與 302 跟隨跳轉
-                const response = await fetch(emailApiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain' },
-                    body: JSON.stringify(mailData),
-                    redirect: 'follow'
-                });
-                
-                if (response.ok) {
-                    showAppAlert("申請已送出！", "您的專屬會員申請已成功寄送給管理員審核！", "✅");
-                    closeMembershipModal();
+            // 按時間排序
+            currentComments.sort((a, b) => b.timestamp - a.timestamp);
 
-                    // 清空表單
-                    document.getElementById('memClass').value = '';
-                    document.getElementById('memNum').value = '';
-                    document.getElementById('memName').value = '';
-                    document.getElementById('memReason').value = '';
-                    document.getElementById('memCondition').value = '';
-                } else {
-                    throw new Error("發送郵件請求失敗");
+            currentComments.forEach(c => {
+                const isImage = (url) => /\.(jpg|jpeg|png|webp|gif|svg)/i.test(url);
+                const isVideo = (url) => /\.(mp4|webm|ogg|mov)/i.test(url);
+                
+                let mediaHtml = '';
+                if (c.mediaUrls) {
+                    try {
+                        const urls = typeof c.mediaUrls === 'string' ? JSON.parse(c.mediaUrls) : c.mediaUrls;
+                        if (urls && urls.length > 0) {
+                            mediaHtml = `<div class="grid grid-cols-2 gap-2 mt-2">`;
+                            urls.forEach(url => {
+                                if (isImage(url)) {
+                                    mediaHtml += `
+                                        <div class="relative rounded-lg overflow-hidden border border-slate-100 max-h-48">
+                                            <img src="${url}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/150?text=圖片載入失敗'">
+                                        </div>`;
+                                } else if (isVideo(url)) {
+                                    mediaHtml += `
+                                        <div class="rounded-lg overflow-hidden border border-slate-100 max-h-48 bg-black flex items-center">
+                                            <video src="${url}" controls class="w-full h-full max-h-48"></video>
+                                        </div>`;
+                                } else {
+                                    mediaHtml += `
+                                        <a href="${url}" target="_blank" class="text-[10px] text-indigo-500 hover:underline block truncate mt-1">
+                                            🔗 點此觀看外部連結
+                                        </a>`;
+                                }
+                            });
+                            mediaHtml += `</div>`;
+                        }
+                    } catch(err) {
+                        console.error("解讀多媒體網址錯誤:", err);
+                    }
                 }
-            } catch (error) {
-                console.error("發送郵件錯誤:", error);
-                showAppAlert("寄送失敗", "網路或 API 發生錯誤。請確保您的發信 Apps Script API 已重新部署，且未設定干擾的觸發條件！", "❌");
-            }
+
+                const friendlyRole = roleTranslationMap[c.role] || c.role;
+                const timeString = new Date(Number(c.timestamp)).toLocaleString('zh-TW', { hour12: false });
+                const div = document.createElement('div');
+                div.className = "p-4 bg-slate-50/50 rounded-xl border border-slate-100 space-y-2 flex flex-col justify-between";
+                div.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div class="flex items-center space-x-2">
+                            <span class="font-bold text-slate-800 text-sm">${c.nickname}</span>
+                            <span class="bg-indigo-50 text-indigo-700 text-[9px] font-bold px-1.5 py-0.5 rounded border border-indigo-100">${friendlyRole}</span>
+                        </div>
+                        <span class="text-[10px] text-slate-400">${timeString}</span>
+                    </div>
+                    <p class="text-sm text-slate-700 whitespace-pre-wrap leading-relaxed">${c.content}</p>
+                    ${mediaHtml}
+                `;
+                container.appendChild(div);
+            });
         }
 
-        // ==================== H. 後台管理 ====================
-        // 動態權益判斷系統 (核心隔離關鍵)
+        // ==================== Z. 會員申請專區 (階級與Email) ====================
+        const membershipBadgeChineseMap = {
+            "Bluecat's Fans": "藍貓粉絲",
+            "Bucket's Fans": "水桶粉絲",
+            "Eason's Fans": "帥霖粉絲",
+            "WeiWei's Friends": "瑋瑋鄰居",
+            "Sus Guys": "八卦小孩"
+        };
+
+        // ==================== H. 後台管理與作品編輯 ====================
+        function openEditNovelModal(novelId) {
+            const novel = state.novels.find(n => n.id === novelId);
+            if (!novel) return;
+
+            document.getElementById('editNovelId').value = novel.id;
+            document.getElementById('editNovelTitle').value = novel.title;
+            document.getElementById('editNovelAuthor').value = novel.author;
+            document.getElementById('editNovelCover').value = novel.cover || '📖';
+            document.getElementById('editNovelDesc').value = novel.description || '';
+
+            document.getElementById('editNovelModal').classList.remove('hidden');
+        }
+
+        function closeEditNovelModal() {
+            document.getElementById('editNovelModal').classList.add('hidden');
+        }
+
+        function saveEditNovelData() {
+            const id = document.getElementById('editNovelId').value;
+            const title = document.getElementById('editNovelTitle').value.trim();
+            const author = document.getElementById('editNovelAuthor').value.trim();
+            const cover = document.getElementById('editNovelCover').value.trim() || '📖';
+            const desc = document.getElementById('editNovelDesc').value.trim();
+
+            if (!title || !author) {
+                showAppAlert("資料遺漏", "小說標題與作者名稱不可為空！", "⚠️");
+                return;
+            }
+
+            state.novels = state.novels.map(novel => {
+                if (novel.id === id) {
+                    return {
+                        ...novel,
+                        title: title,
+                        author: author,
+                        cover: cover,
+                        description: desc
+                    };
+                }
+                return novel;
+            });
+
+            saveNovelsToStorage();
+            renderAdminNovelsTable();
+            updateChapterSelectDropdown();
+            closeEditNovelModal();
+            showAppAlert("修改成功", `小說《${title}》資訊已成功更新並寫入資料庫！`, "✅");
+        }
+
         function hasPermission(action) {
             if (!state.currentUser) return false;
             const role = state.currentUser.role;
@@ -1431,11 +1675,12 @@
         function renderAdminNovelsTable() {
             const body = document.getElementById('adminNovelTableBody'); body.innerHTML = '';
             
-            // 動態調整操作列標題：只有當前帳號有 'deleteNovel' 權限才顯示操作列
+            // 動態調整操作列標題：只有當前帳號有 'deleteNovel' 或是 'editNovel' 權限才顯示操作列
             const canDelete = hasPermission('deleteNovel');
+            const canEdit = hasPermission('editNovel');
             const adminNovelActionHeader = document.getElementById('adminNovelActionHeader');
             if (adminNovelActionHeader) {
-                if (canDelete) {
+                if (canDelete || canEdit) {
                     adminNovelActionHeader.classList.remove('hidden');
                 } else {
                     adminNovelActionHeader.classList.add('hidden');
@@ -1444,15 +1689,22 @@
 
             state.novels.forEach(novel => {
                 const tr = document.createElement('tr'); tr.className = "border-b border-slate-100 hover:bg-slate-50 transition";
+                
+                // 動態組裝操作按鈕
+                let actionsHtml = '';
+                if (canEdit) {
+                    actionsHtml += `<button onclick="openEditNovelModal('${novel.id}')" class="text-xs bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-bold px-3 py-1.5 rounded-lg transition mr-1">📝 編輯</button>`;
+                }
+                if (canDelete) {
+                    actionsHtml += `<button onclick="deleteNovelData('${novel.id}')" class="text-xs bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold px-3 py-1.5 rounded-lg transition">🗑️ 刪除</button>`;
+                }
+
                 tr.innerHTML = `
                     <td class="py-4 px-4 text-2xl select-none">${novel.cover || '📖'}</td>
                     <td class="py-4 px-4 font-bold text-slate-800">${novel.title}</td>
                     <td class="py-4 px-4 text-slate-500">${novel.author}</td>
                     <td class="py-4 px-4 font-semibold text-indigo-600">${novel.chapters ? novel.chapters.length : 0} 章</td>
-                    ${canDelete ? `
-                    <td class="py-4 px-4 space-x-2">
-                        <button onclick="deleteNovelData('${novel.id}')" class="text-xs bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold px-3 py-1.5 rounded-lg transition">刪除</button>
-                    </td>` : ''}`;
+                    ${(canDelete || canEdit) ? `<td class="py-4 px-4 space-x-1">${actionsHtml}</td>` : ''}`;
                 body.appendChild(tr);
             });
         }
