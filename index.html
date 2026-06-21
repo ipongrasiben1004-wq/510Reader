@@ -117,7 +117,7 @@
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
                         </button>
                         <button onclick="scrollShelf('right')" class="p-2 bg-white hover:bg-slate-100 text-slate-600 rounded-full shadow-sm border border-slate-200 transition">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></svg>
                         </button>
                         <div class="text-xs text-slate-500 pl-2">共 <span id="novelCount">0</span> 本</div>
                     </div>
@@ -163,8 +163,7 @@
                 </div>
             </div>
 
-            <!-- 閱讀器正文區 -->
-            <div id="readerBox" class="bg-white p-6 md:p-10 rounded-2xl shadow-sm border border-slate-100 min-h-[400px] flex flex-col justify-between transition-all duration-200">
+            <div id="readerBox" class="bg-white p-6 md:p-10 rounded-2xl shadow-sm border border-slate-100 min-h-[500px] flex flex-col justify-between transition-all duration-200">
                 <div class="space-y-6">
                     <div class="border-b border-slate-200/60 pb-4">
                         <div class="text-xs text-indigo-600 font-semibold tracking-wider uppercase mb-1" id="readerNovelName">載入中...</div>
@@ -172,7 +171,7 @@
                     </div>
 
                     <!-- 章節文字 -->
-                    <article id="readerContent" class="text-lg leading-relaxed text-slate-700 whitespace-pre-wrap min-h-[250px] font-serif">
+                    <article id="readerContent" class="text-lg leading-relaxed text-slate-700 whitespace-pre-wrap min-h-[300px] font-serif">
                         正在取得章節內容，請稍候...
                     </article>
                 </div>
@@ -257,6 +256,7 @@
                 <button onclick="switchAdminTab('novels')" id="tabBtn-novels" class="px-4 py-2 text-sm font-semibold border-b-2 border-indigo-600 text-indigo-600 whitespace-nowrap">📚 小說管理</button>
                 <button onclick="switchAdminTab('chapters')" id="tabBtn-chapters" class="px-4 py-2 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap">📝 章節編排</button>
                 <button onclick="switchAdminTab('settings')" id="tabBtn-settings" class="px-4 py-2 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap">🔔 頻道與系統設定</button>
+                <!-- 創辦者 ReadingMaker 專屬身分管理分頁標籤 -->
                 <button onclick="switchAdminTab('users')" id="tabBtn-users" class="hidden px-4 py-2 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap">👥 身分與權限管理</button>
             </div>
 
@@ -781,7 +781,7 @@
                     {
                         id: "chap-510-2",
                         title: "第二章：黑板危機與裝菜小山",
-                        content: "這時，排在更後面的6號桂祥騰一臉興奮地伸長脖子大喊：\n「單挑？你確定嗎？你連我都打不過。上次說要抱曹棋棋已經放過你了，我跟你單挑你被5:1，而且我可沒有學許晞本拿噴火槍（我沒有）。不過我還是去玩《三角洲》比較好，《競爭者》爛爆了！」\n\n許晞本一聽，趕緊小聲點了一下桂祥騰叫他安靜。直到兩個人轉頭看向黑板，才發現上面不知道什麼時候已經被小少少記了 6 x 5 跟 12 x 2。大家馬上閉嘴，瞬間安靜了下來……\n\n此時，輪到曹棋棋裝飯。她拿飯匙裝了億點點飯、裝了一顆蛋、裝了半根蔬菜，然後就迅速回到座位拿她的湯碗，裝了億點點湯。前後花不到5分鐘，就把午餐解決了。\n\n曹棋棋：\n「今天這菜 hon 難吃，所以裝半根就好。」\n\n排在旁邊的葉筳榆看著曹棋棋的碗，表示無語：\n「你每次都裝這麼少，等一下真的不會餓嗎？」\n\n另一邊，桂祥騰端著他那只有薄薄一層底部白飯、連一片菜葉都沒有的碗，湊到謝易霖旁邊突然冒句：\n「欸，謝易霖，你到底有沒有玩三角洲啊？」\n\n謝易霖（一邊吃飯一邊翻白眼）：\n「哥們你排隊盛飯也可以扯到三角洲，然後你是不是沒裝菜，給我回去裝菜啦！」\n\n最後輪到許晞本，他看著剩下的菜，開始瘋狂把大陸妹 and A菜往自己盤子裡塞，堆得像一座小山，最後擺上一顆搖墜的茶葉蛋。\n\n宋家和：\n「開玩笑，許晞本，你確定裝這麼多嗎？」\n\n許晞本:\n「不然呢？」"
+                        content: "這時，排在更後面的6號桂祥騰一臉興奮地伸長脖子大喊：\n「單挑？你確定嗎？你連我都打不過。上次說要抱曹棋棋已經放過你了，我跟你單挑你被5:1，而且我可沒有學許晞本拿噴火槍（我沒有）。不過我還是去玩《三角洲》比較好，《競爭者》爛爆了！」\n\n許晞本一聽，趕緊小聲點了一下桂祥騰叫他安靜。直到兩個人轉頭看向黑板，才發現上面不知道什麼時候已經被小少少記了 6 x 5 跟 12 x 2。大家馬上閉嘴，瞬間安靜了下來……\n\n此時，輪到曹棋棋裝飯。她拿飯匙裝了億點點飯、裝了一顆蛋、裝了半根蔬菜，然後就迅速回到座位拿她的湯碗，裝了億點點湯。前後花不到5分鐘，就把午餐解決了。\n\n曹棋棋：\n「今天這菜 hon 難吃，所以裝半根就好。」\n\n排在旁邊的葉筳榆看著曹棋棋的碗，表示無語：\n「你每次都裝這麼少，等一下真的不會餓嗎？」\n\n另一邊，桂祥騰端著他那只有薄薄一層底部白飯、連一片菜葉都沒有的碗，湊到謝易霖邊突然冒句：\n「欸，謝易霖，你到底有沒有玩三角洲啊？」\n\n謝易霖（一邊吃飯一邊翻白眼）：\n「哥們你排隊盛飯也可以扯到三角洲，然後你是不是沒裝菜，給我回去裝菜啦！」\n\n最後輪到許晞本，他看著剩下的菜，開始瘋狂把大陸妹 and A菜往自己盤子裡塞，堆得像一座小山，最後擺上一顆搖墜的茶葉蛋。\n\n宋家和：\n「開玩笑，許晞本，你確定裝這麼多嗎？」\n\n許晞本:\n「不然呢？」"
                     },
                     {
                         id: "chap-510-3",
@@ -1345,11 +1345,11 @@
         function changeFontSize(d) { currentFontSize = Math.max(14, Math.min(32, currentFontSize + d)); document.getElementById('readerContent').style.fontSize = `${currentFontSize}px`; }
         function setTheme(theme) {
             const box = document.getElementById('readerBox');
-            box.className = "p-6 md:p-10 rounded-2xl shadow-sm border min-h-[500px] flex flex-col justify-between transition-all duration-200";
-            if (theme === 'light') { box.classList.add('bg-white', 'border-slate-100', 'text-slate-800'); document.getElementById('readerContent').className = "text-lg leading-relaxed text-slate-700 whitespace-pre-wrap min-h-[300px] font-serif"; }
-            else if (theme === 'eyecare') { box.classList.add('bg-eyecare', 'border-amber-200/40', 'text-eyecaretext'); document.getElementById('readerContent').className = "text-lg leading-relaxed text-[#4a3319] whitespace-pre-wrap min-h-[300px] font-serif"; }
-            else if (theme === 'sepia') { box.classList.add('bg-amber-100/50', 'border-orange-200/40', 'text-amber-950'); document.getElementById('readerContent').className = "text-lg leading-relaxed text-amber-900 whitespace-pre-wrap min-h-[300px] font-serif"; }
-            else if (theme === 'dark') { box.classList.add('bg-slate-800', 'border-slate-700', 'text-slate-100'); document.getElementById('readerContent').className = "text-lg leading-relaxed text-slate-300 whitespace-pre-wrap min-h-[300px] font-serif"; }
+            box.className = "p-6 md:p-10 rounded-2xl shadow-sm border min-h-[400px] flex flex-col justify-between transition-all duration-200";
+            if (theme === 'light') { box.classList.add('bg-white', 'border-slate-100', 'text-slate-800'); document.getElementById('readerContent').className = "text-lg leading-relaxed text-slate-700 whitespace-pre-wrap min-h-[250px] font-serif"; }
+            else if (theme === 'eyecare') { box.classList.add('bg-eyecare', 'border-amber-200/40', 'text-eyecaretext'); document.getElementById('readerContent').className = "text-lg leading-relaxed text-[#4a3319] whitespace-pre-wrap min-h-[250px] font-serif"; }
+            else if (theme === 'sepia') { box.classList.add('bg-amber-100/50', 'border-orange-200/40', 'text-amber-950'); document.getElementById('readerContent').className = "text-lg leading-relaxed text-amber-900 whitespace-pre-wrap min-h-[250px] font-serif"; }
+            else if (theme === 'dark') { box.classList.add('bg-slate-800', 'border-slate-700', 'text-slate-100'); document.getElementById('readerContent').className = "text-lg leading-relaxed text-slate-300 whitespace-pre-wrap min-h-[250px] font-serif"; }
         }
 
         function toggleChapterListModal() {
