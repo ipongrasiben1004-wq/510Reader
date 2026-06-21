@@ -192,7 +192,7 @@
                 </div>
             </div>
 
-            <!-- 💬 讀者評論與留言互動模組 -->
+            <!-- 💬 讀者評論與留言互動模組 (整篇小說留言共享，不分章節) -->
             <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100 space-y-6">
                 <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                     <h3 class="text-lg font-bold text-slate-800 flex items-center space-x-2">
@@ -201,6 +201,7 @@
                     <span class="text-xs text-slate-400" id="commentCountLabel">0 則留言</span>
                 </div>
 
+                <!-- 留言輸入區表單 -->
                 <div id="commentFormArea" class="space-y-3">
                     <div id="commentBoxPlaceholder" class="hidden p-4 bg-slate-50 border border-slate-200 rounded-xl text-center text-sm">
                         <span>請先</span>
@@ -215,12 +216,15 @@
                         </div>
                         <textarea id="newCommentContent" rows="3" oninput="handleCommentInput(this)" class="w-full p-3 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="寫下您對這部小說的看法..."></textarea>
                         
+                        <!-- 附帶多媒體連結區 (讀者以外身分限定顯示) -->
                         <div id="commentMediaContainer" class="hidden p-3 bg-indigo-50/50 rounded-xl border border-indigo-100/50 space-y-2">
                             <div class="text-xs font-bold text-indigo-700 flex justify-between items-center">
                                 <span>📎 附加多媒體網址 (圖片或影片，最多 5 個)</span>
                                 <button onclick="addMediaInputRow()" class="text-xs bg-indigo-600 hover:bg-indigo-700 text-white px-2 py-0.5 rounded font-bold transition">+ 增加網址</button>
                             </div>
-                            <div id="mediaUrlsList" class="space-y-1.5"></div>
+                            <div id="mediaUrlsList" class="space-y-1.5">
+                                <!-- 動態生成輸入欄位 -->
+                            </div>
                         </div>
 
                         <div class="flex justify-end">
@@ -231,7 +235,10 @@
                     </div>
                 </div>
 
-                <div id="commentsList" class="space-y-4 pt-4 border-t border-slate-100 max-h-[500px] overflow-y-auto no-scrollbar"></div>
+                <!-- 評論清單 -->
+                <div id="commentsList" class="space-y-4 pt-4 border-t border-slate-100 max-h-[500px] overflow-y-auto no-scrollbar">
+                    <!-- 動態渲染讀者評論 -->
+                </div>
             </div>
         </section>
 
@@ -251,12 +258,13 @@
                 <button onclick="switchAdminTab('novels')" id="tabBtn-novels" class="px-4 py-2 text-sm font-semibold border-b-2 border-indigo-600 text-indigo-600 whitespace-nowrap">📚 小說管理</button>
                 <button onclick="switchAdminTab('chapters')" id="tabBtn-chapters" class="px-4 py-2 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap">📝 章節編排</button>
                 <button onclick="switchAdminTab('settings')" id="tabBtn-settings" class="px-4 py-2 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap">🔔 頻道與系統設定</button>
-                <!-- 👥 創辦者專屬身分管理 -->
+                <!-- 創辦者 ReadingMaker 專屬身分管理分頁標籤 -->
                 <button onclick="switchAdminTab('users')" id="tabBtn-users" class="hidden px-4 py-2 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap">👥 身分與權限管理</button>
             </div>
 
             <!-- 小說管理分頁 -->
             <div id="adminTab-novels" class="space-y-6">
+                <!-- 建立新小說面板 -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-4" id="createNovelBlock">
                     <h3 class="text-lg font-bold text-slate-800">✨ 建立新小說</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -282,6 +290,7 @@
                     </button>
                 </div>
 
+                <!-- 既存小說列表 -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                     <h3 class="text-lg font-bold text-slate-800 mb-4">📚 現存作品清單</h3>
                     <div class="overflow-x-auto">
@@ -782,7 +791,7 @@
                     {
                         id: "chap-510-3",
                         title: "第三章：跌倒意外與怪北北的關心",
-                        content: "[場景：五年10班教室 / 第二節大下課]\n\n下課時間，謝易霖在走廊上興奮地玩著棒球手套，一不小心跟別人大擦撞，整個人慘摔跌在地上。許晞本看到，第一時間整個人「飛」過去看他怎麼樣。\n\n許晞本（緊緊抓住謝易霖操場跑道上擦傷的手臂，滿臉怪北北的眼神看著他）：\n「欸你還好嗎？要不要去健康中心？手斷了嗎？如果斷了，怎麼做專題研究啊？我們還要做喇叭欸！」\n\n謝易霖（一邊黑線地站起來，拍拍灰塵）：\n「……許晞本我只是跌倒，不要詛咒我好不好！」"
+                        content: "[場景：五年10班教室 / 第二節大下課]\n\n下課時間，謝易霖在走廊上興奮地玩著棒球手套，一不小心跟別人大擦撞，整個人慘摔跌在地上。許晞本看到，第一時間整個人「飛」過去看他怎麼樣。\n\n許晞本（緊緊抓住謝易霖的手臂，滿臉怪北北的眼神看著他）：\n「欸你還好嗎？要不要去健康中心？手斷了嗎？如果斷了，怎麼做專題研究啊？我們還要做喇叭欸！」\n\n謝易霖（一邊黑線地站起來，拍拍灰塵）：\n「……許晞本我只是跌倒，不要詛咒我好不好！」"
                     },
                     {
                         id: "chap-510-4",
@@ -1061,7 +1070,6 @@
         }
         function closeLoginModal() { document.getElementById('loginModal').classList.add('hidden'); }
         function toggleLoginTab(tab) {
-            state.authTab = tab;
             const loginBtn = document.getElementById('modalTab-login');
             const registerBtn = document.getElementById('modalTab-register');
             const nicknameGroup = document.getElementById('registerNicknameGroup');
@@ -1391,7 +1399,7 @@
             }
         }
 
-        // ==================== 讀者留言與多媒體評論 ====================
+        // ==================== 讀者評論與多媒體評論 ====================
         function handleCommentInput(el) {
             if (!state.currentUser) return;
             const isBasicReader = (state.currentUser.role === 'Reader' || state.currentUser.role === 'reader');
@@ -1470,7 +1478,7 @@
 
         async function submitChapterComment() {
             const content = document.getElementById('newCommentContent').value.trim();
-            if (!content) { showAppAlert("無法留言", "請先輸入您的評論內容！", "⚠️"); return; }
+            if (!content) { showAppAlert("無法留言", "請先入您的評論內容！", "⚠️"); return; }
 
             // 套用隱私偏好 (讓別人看見留言/暱稱/職位)
             const showComments = getUserPref('comments', true);
@@ -1847,7 +1855,8 @@
                 farewellChannel: hasPermission('editFarewell') ? document.getElementById('setFarewellChannel').value.trim() : (s.farewellChannel || '#bye-bye'),
                 farewellMsg: hasPermission('editFarewell') ? document.getElementById('setFarewellMsg').value.trim() : (s.farewellMsg || ''),
                 siteNoticeText: hasPermission('editNotice') ? document.getElementById('setSiteNoticeText').value.trim() : (s.siteNoticeText || ''),
-                siteNoticeActive: hasPermission('editNotice') ? document.getElementById('setSiteNoticeActive').value : (s.siteNoticeActive || 'true')
+                siteNoticeActive: hasPermission('editNotice') ? document.getElementById('setSiteNoticeActive').value : (s.siteNoticeActive || 'true'),
+                manually_configured: true
             };
 
             state.systemSettings = newSettings;
@@ -2599,7 +2608,7 @@
             } else if (theme === 'eyecare') {
                 preview.classList.add('bg-eyecare', 'border-amber-200/40', 'text-eyecaretext');
             } else if (theme === 'sepia') {
-                preview.classList.add('bg-orange-100/70', 'border-orange-200/40', 'text-amber-900');
+                preview.classList.add('bg-orange-100/70', 'border-orange-200/40', 'text-amber-950');
             } else if (theme === 'dark') {
                 preview.classList.add('bg-slate-800', 'border-slate-700', 'text-slate-200');
             }
