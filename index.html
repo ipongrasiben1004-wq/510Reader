@@ -1,0 +1,1860 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📚 星河小說創作與管理系統</title>
+    <!-- 引入 Tailwind CSS 提供極致精美視覺 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        eyecare: '#f4ecd8',
+                        eyecaretext: '#5c4033',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* 隱藏滾動條但保持功能 */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans transition-colors duration-200">
+
+    <!-- ==================== 頂部導覽列 ==================== -->
+    <header class="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40 px-4 py-3">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <!-- Logo -->
+            <div class="flex items-center space-x-2 cursor-pointer" onclick="navigateTo('home')">
+                <span class="text-2xl">📚</span>
+                <span class="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">星河小說空間</span>
+            </div>
+
+            <!-- 右側導覽資訊與控制項 -->
+            <div class="flex items-center space-x-4">
+                <!-- 雲端同步狀態指示器 -->
+                <div id="cloudSyncStatus" class="hidden items-center space-x-1 bg-emerald-50 border border-emerald-100 rounded-full px-2.5 py-1 text-[10px] font-bold text-emerald-700 animate-pulse">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    <span>資料處理中</span>
+                </div>
+
+                <!-- 網站公告跑馬燈 -->
+                <div class="hidden md:flex items-center bg-indigo-50 border border-indigo-100 rounded-full px-3 py-1 text-xs text-indigo-700 max-w-xs overflow-hidden">
+                    <span class="font-bold mr-1">📢 公告:</span>
+                    <span id="headerAnnouncement" class="truncate">載入中...</span>
+                </div>
+
+                <!-- 讀者/作者切換 -->
+                <button id="adminPortalBtn" onclick="navigateTo('admin')" class="hidden bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-sm transition">
+                    ⚙️ 後台管理
+                </button>
+
+                <!-- 用戶狀態 -->
+                <div id="userMenu" class="flex items-center space-x-3">
+                    <!-- 未登入 -->
+                    <button id="navLoginBtn" onclick="openLoginModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm px-4 py-1.5 rounded-lg font-medium transition">
+                        登入 / 註冊
+                    </button>
+                    <!-- 已登入 -->
+                    <div id="userInfoArea" class="hidden flex items-center space-x-3">
+                        <span id="userNickname" class="text-sm font-semibold text-slate-700">讀者</span>
+                        <span id="userRoleBadge" class="bg-indigo-100 text-indigo-800 text-[10px] font-bold px-2 py-0.5 rounded-full">讀者</span>
+                        <button onclick="handleLogout()" class="text-slate-500 hover:text-red-600 transition text-sm">登出</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== 系統公告欄 ==================== -->
+    <div id="siteNoticeBar" class="bg-amber-500 text-white text-center py-2 px-4 text-sm font-medium relative hidden">
+        <span id="siteNoticeText">這是一條重要的網站公告！</span>
+        <button onclick="document.getElementById('siteNoticeBar').classList.add('hidden')" class="absolute right-4 top-2 hover:opacity-80">✕</button>
+    </div>
+
+    <!-- 主內容區 -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 md:p-6">
+
+        <!-- ==================== 頁面 1：小說大廳 (Home) ==================== -->
+        <section id="page-home" class="space-y-8">
+            <!-- 橫幅區 -->
+            <div class="bg-gradient-to-r from-indigo-900 via-indigo-800 to-purple-900 rounded-2xl p-6 md:p-10 text-white shadow-xl relative overflow-hidden">
+                <div class="relative z-10 max-w-2xl space-y-4">
+                    <span class="bg-indigo-500/30 text-indigo-300 text-xs font-bold px-3 py-1 rounded-full border border-indigo-400/30">精品原創小說平台</span>
+                    <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">探索專屬於你的文字世界</h1>
+                    <p class="text-indigo-100 text-sm md:text-base">在這裡，每一部小說都是一場奇幻的冒險。歡迎來到星河小說空間，登入後即可享有個人化書籤與進度紀錄。</p>
+                    <div class="flex space-x-3">
+                        <button onclick="scrollToNovels()" class="bg-white text-indigo-900 hover:bg-slate-100 font-semibold text-sm px-5 py-2.5 rounded-xl shadow-md transition">立即閱讀</button>
+                        <!-- 點擊加入會員，檢查登入並開啟專屬申請表 -->
+                        <button onclick="handleJoinMembershipBtn()" class="bg-indigo-600/50 hover:bg-indigo-600/80 border border-indigo-400/30 font-semibold text-sm px-5 py-2.5 rounded-xl transition">加入會員</button>
+                    </div>
+                </div>
+                <div class="absolute right-0 bottom-0 top-0 opacity-10 pointer-events-none hidden lg:block">
+                    <span class="text-[200px]">📖</span>
+                </div>
+            </div>
+
+            <!-- 小說展示區 (一整排小說滑動橫幅) -->
+            <div id="novelsSection" class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xl font-bold text-slate-800 flex items-center space-x-2">
+                        <span>🔥</span> <span>精選連載書架</span>
+                    </h2>
+                    <!-- 左右滑動按鈕 -->
+                    <div class="flex items-center space-x-2">
+                        <button onclick="scrollShelf('left')" class="p-2 bg-white hover:bg-slate-100 text-slate-600 rounded-full shadow-sm border border-slate-200 transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
+                        </button>
+                        <button onclick="scrollShelf('right')" class="p-2 bg-white hover:bg-slate-100 text-slate-600 rounded-full shadow-sm border border-slate-200 transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+                        </button>
+                        <div class="text-xs text-slate-500 pl-2">共 <span id="novelCount">0</span> 本</div>
+                    </div>
+                </div>
+
+                <!-- 橫向滑動容器 -->
+                <div class="relative">
+                    <div id="novelShelf" class="flex overflow-x-auto gap-6 pb-4 pt-1 px-1 no-scrollbar snap-x snap-mandatory scroll-smooth">
+                        <!-- 小說卡片由 JS 動態生成 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 全站作品全覽 (網格展示區) -->
+            <div class="space-y-4 border-t border-slate-200/60 pt-6">
+                <h3 class="text-lg font-bold text-slate-800 flex items-center space-x-2">
+                    <span>📚</span> <span>全站作品列表</span>
+                </h3>
+                <div id="novelGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                    <!-- 網格列表由 JS 動態生成 -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== 頁面 2：小說閱讀器 (Reader) ==================== -->
+        <section id="page-reader" class="hidden max-w-4xl mx-auto space-y-4">
+            <!-- 返回與設定工具列 -->
+            <div class="flex items-center justify-between bg-white px-4 py-3 rounded-xl shadow-sm border border-slate-100">
+                <button onclick="navigateTo('home')" class="text-slate-600 hover:text-indigo-600 text-sm font-semibold flex items-center space-x-1">
+                    <span>←</span> <span>返回大廳</span>
+                </button>
+                <div class="flex items-center space-x-2">
+                    <button onclick="changeFontSize(-2)" class="p-1 px-2 hover:bg-slate-100 rounded text-sm font-bold">A-</button>
+                    <button onclick="changeFontSize(2)" class="p-1 px-2 hover:bg-slate-100 rounded text-sm font-bold">A+</button>
+                    <div class="h-4 w-px bg-slate-200 mx-2"></div>
+                    <!-- 背景主題色切換 -->
+                    <div class="flex space-x-1">
+                        <button onclick="setTheme('light')" class="w-6 h-6 rounded-full border border-slate-300 bg-white" title="明亮白"></button>
+                        <button onclick="setTheme('eyecare')" class="w-6 h-6 rounded-full border border-amber-300 bg-eyecare" title="護眼綠"></button>
+                        <button onclick="setTheme('sepia')" class="w-6 h-6 rounded-full border border-orange-300 bg-orange-100" title="復古黃"></button>
+                        <button onclick="setTheme('dark')" class="w-6 h-6 rounded-full border border-slate-700 bg-slate-800" title="暗黑夜"></button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="readerBox" class="bg-white p-6 md:p-10 rounded-2xl shadow-sm border border-slate-100 min-h-[500px] flex flex-col justify-between transition-all duration-200">
+                <div class="space-y-6">
+                    <div class="border-b border-slate-200/60 pb-4">
+                        <div class="text-xs text-indigo-600 font-semibold tracking-wider uppercase mb-1" id="readerNovelName">載入中...</div>
+                        <h1 class="text-2xl md:text-3xl font-bold text-slate-800" id="readerChapterTitle">讀取中...</h1>
+                    </div>
+
+                    <!-- 章節文字 -->
+                    <article id="readerContent" class="text-lg leading-relaxed text-slate-700 whitespace-pre-wrap min-h-[300px] font-serif">
+                        正在取得章節內容，請稍候...
+                    </article>
+                </div>
+
+                <!-- 閱讀器底部翻頁 -->
+                <div class="border-t border-slate-200/60 pt-6 mt-8 flex justify-between items-center">
+                    <button id="prevChapterBtn" onclick="prevChapter()" class="px-4 py-2 border border-slate-200 hover:bg-slate-50 text-sm font-semibold rounded-xl transition">
+                        上一章
+                    </button>
+                    <button onclick="toggleChapterListModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-xl transition">
+                        目錄
+                    </button>
+                    <button id="nextChapterBtn" onclick="nextChapter()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition">
+                        下一章
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== 頁面 3：後台管理門戶 (Admin) ==================== -->
+        <section id="page-admin" class="hidden space-y-6">
+            <div class="flex items-center justify-between">
+                <h1 class="text-2xl font-bold text-slate-800 flex items-center space-x-2">
+                    <span>⚙️</span> <span>作者與系統控制後台</span>
+                </h1>
+                <button onclick="navigateTo('home')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold px-4 py-2 rounded-xl transition">
+                    返回前端大廳
+                </button>
+            </div>
+
+            <!-- 後台導覽標籤 -->
+            <div class="flex space-x-2 border-b border-slate-200 overflow-x-auto no-scrollbar">
+                <button onclick="switchAdminTab('novels')" id="tabBtn-novels" class="px-4 py-2 text-sm font-semibold border-b-2 border-indigo-600 text-indigo-600 whitespace-nowrap">📚 小說管理</button>
+                <button onclick="switchAdminTab('chapters')" id="tabBtn-chapters" class="px-4 py-2 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap">📝 章節編排</button>
+                <button onclick="switchAdminTab('settings')" id="tabBtn-settings" class="px-4 py-2 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap">🔔 頻道與系統設定</button>
+                <!-- 創辦者 ReadingMaker 專屬身分管理分頁標籤 -->
+                <button onclick="switchAdminTab('users')" id="tabBtn-users" class="hidden px-4 py-2 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap">👥 身分與權限管理</button>
+            </div>
+
+            <!-- A. 小說管理分頁 -->
+            <div id="adminTab-novels" class="space-y-6">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-4">
+                    <h3 class="text-lg font-bold text-slate-800">✨ 建立新小說</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">小說書名</label>
+                            <input id="newNovelTitle" type="text" placeholder="輸入精彩書名..." class="w-full p-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">作者筆名</label>
+                            <input id="newNovelAuthor" type="text" placeholder="筆名..." class="w-full p-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">封面 Emoji (例如: 🚀, 🧙, 🐉)</label>
+                            <input id="newNovelCover" type="text" placeholder="輸入一個 Emoji 作為封面圖樣..." class="w-full p-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">小說大綱與介紹說明</label>
+                            <textarea id="newNovelDesc" rows="3" placeholder="寫些精簡吸引人的大綱簡介..." class="w-full p-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                        </div>
+                    </div>
+                    <button onclick="createNewNovel()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition">
+                        發布新作品
+                    </button>
+                </div>
+
+                <!-- 既存小說列表 -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4">📚 現存作品清單</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead>
+                                <tr class="border-b border-slate-100 text-slate-400 font-semibold">
+                                    <th class="py-3 px-4">封面</th>
+                                    <th class="py-3 px-4">小說名稱</th>
+                                    <th class="py-3 px-4">作者</th>
+                                    <th class="py-3 px-4">章節數</th>
+                                    <th class="py-3 px-4" id="adminNovelActionHeader">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminNovelTableBody">
+                                <!-- 動態生成 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- B. 章節編排分頁 -->
+            <div id="adminTab-chapters" class="hidden space-y-6">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-4">
+                    <h3 class="text-lg font-bold text-slate-800">✍️ 撰寫章節</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">選擇小說作品</label>
+                            <select id="chapterNovelSelect" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                <!-- 動態載入小說清單 -->
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">章節名稱 (例如: 第一章 啟程)</label>
+                            <input id="chapterTitle" type="text" placeholder="請輸入章節名稱..." class="w-full p-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">章節內容</label>
+                            <textarea id="chapterContent" rows="12" placeholder="在此處貼上或創作您的小說內容..." class="w-full p-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-serif"></textarea>
+                        </div>
+                    </div>
+                    <button onclick="saveChapterData()" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition">
+                        儲存並寫入資料庫
+                    </button>
+                </div>
+            </div>
+
+            <!-- C. 頻道與系統設定分頁 -->
+            <div id="adminTab-settings" class="hidden space-y-6">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-6">
+                    
+                    <!-- 會員申請 Email 寄信端口連結 (ReadingMaker 專屬) -->
+                    <div class="border-b border-slate-100 pb-5" id="emailGasUrlBlock">
+                        <h3 class="text-lg font-bold text-emerald-700 flex items-center space-x-2">
+                            <span>📩</span> <span>會員申請 Email 發送 API 串接</span>
+                        </h3>
+                        <p class="text-slate-500 text-xs mt-1">
+                            將您用來發送 Email 的 Google Apps Script URL 貼於下方。當讀者填寫「專屬會員」申請單時，系統將透過此 API 自動寄信給管理員。
+                        </p>
+                        <div class="mt-3">
+                            <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Email Apps Script URL</label>
+                            <input id="setEmailGasUrl" type="url" placeholder="https://script.google.com/macros/s/.../exec" class="w-full p-2.5 bg-emerald-50/50 border border-emerald-100 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500">
+                        </div>
+                    </div>
+
+                    <!-- Google Sheets 同步端口連結 (ReadingMaker 專屬) -->
+                    <div class="border-b border-slate-100 pb-5" id="dbGasUrlBlock">
+                        <h3 class="text-lg font-bold text-indigo-700 flex items-center space-x-2">
+                            <span>📊</span> <span>Google Sheets 資料庫同步 API</span>
+                        </h3>
+                        <div class="mt-3">
+                            <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Database Apps Script URL</label>
+                            <input id="setGasUrl" type="url" placeholder="https://script.google.com/macros/s/..." class="w-full p-2.5 bg-indigo-50/50 border border-indigo-100 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                    </div>
+
+                    <!-- 歡迎與離別頻道配置 (權限動態隔離) -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="welcomeFarewellConfigGroup">
+                        <!-- 歡迎設定 -->
+                        <div class="p-4 bg-emerald-50 rounded-xl border border-emerald-100 space-y-3" id="welcomeConfigBlock">
+                            <div class="flex items-center space-x-2 text-emerald-800">
+                                <span class="text-xl">👋</span>
+                                <span class="font-bold">註冊歡迎設定</span>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-emerald-700 uppercase mb-1">歡迎頻道名稱</label>
+                                <input id="setWelcomeChannel" type="text" placeholder="#welcome-room" class="w-full p-2.5 bg-white border border-emerald-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-emerald-700 uppercase mb-1">歡迎訊息範本</label>
+                                <textarea id="setWelcomeMsg" rows="3" placeholder="哈囉 {user}，歡迎來到我們的極致小說空間！" class="w-full p-2.5 bg-white border border-emerald-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- 離別設定 -->
+                        <div class="p-4 bg-rose-50 rounded-xl border border-rose-100 space-y-3" id="farewellConfigBlock">
+                            <div class="flex items-center space-x-2 text-rose-800">
+                                <span class="text-xl">😢</span>
+                                <span class="font-bold">登出離別設定</span>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-rose-700 uppercase mb-1">離別頻道名稱</label>
+                                <input id="setFarewellChannel" type="text" placeholder="#bye-bye" class="w-full p-2.5 bg-white border border-rose-200 rounded-xl text-sm focus:ring-2 focus:ring-rose-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-rose-700 uppercase mb-1">離別訊息範本</label>
+                                <textarea id="setFarewellMsg" rows="3" placeholder="{user} 離開了我們，我們在書香世界等候你的歸來！" class="w-full p-2.5 bg-white border border-rose-200 rounded-xl text-sm focus:ring-2 focus:ring-rose-500"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 全站系統設定 -->
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3" id="noticeConfigBlock">
+                        <div class="flex items-center space-x-2 text-slate-800">
+                            <span class="text-xl">📢</span>
+                            <span class="font-bold">全站頂部即時公告欄設定</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="md:col-span-2">
+                                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">公告內容</label>
+                                <input id="setSiteNoticeText" type="text" placeholder="輸入你想讓所有讀者一進來就看見的公告..." class="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">公告狀態</label>
+                                <select id="setSiteNoticeActive" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500">
+                                    <option value="true">開啟公告</option>
+                                    <option value="false">隱藏公告</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-4">
+                        <button onclick="forceResetDatabase()" id="databaseResetBlock" class="bg-slate-100 hover:bg-rose-50 text-slate-500 hover:text-rose-600 font-semibold text-xs px-4 py-2 rounded-xl transition">
+                            ⚠️ 初始化/重置本機小說資料
+                        </button>
+                        <button onclick="saveSystemSettings()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm px-6 py-3 rounded-xl shadow-lg hover:shadow-indigo-500/20 transition-all">
+                            💾 保存所有設定
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- D. 創辦者 ReadingMaker 專屬：使用者身分與權限控制分頁 -->
+            <div id="adminTab-users" class="hidden space-y-6 animate-scale-up">
+                <!-- 第一排：新增帳號 與 自訂身分與權限配置 -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Left: Create User -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-4 h-fit">
+                        <h3 class="text-lg font-bold text-slate-800 flex items-center space-x-2">
+                            <span>✨</span> <span>新增使用者帳號</span>
+                        </h3>
+                        <p class="text-xs text-slate-500">創辦者專屬功能，可直接從後台建立指定身分的使用者。</p>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">電子信箱</label>
+                                <input id="adminNewUserEmail" type="email" placeholder="example@gmail.com" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">初始密碼</label>
+                                <input id="adminNewUserPass" type="password" placeholder="輸入密碼" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">使用者暱稱</label>
+                                <input id="adminNewUserNickname" type="text" placeholder="顯示暱稱" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">配屬權限身分</label>
+                                <select id="adminNewUserRole" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500">
+                                    <!-- 動態渲染 -->
+                                </select>
+                            </div>
+                        </div>
+                        <button onclick="adminCreateUser()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold p-3 rounded-xl shadow-md transition">
+                            ➕ 直接建立新帳號
+                        </button>
+                    </div>
+
+                    <!-- Right: Create custom role -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-4 h-fit">
+                        <h3 class="text-lg font-bold text-slate-800 flex items-center space-x-2">
+                            <span>🛡️</span> <span>自訂身分與權限配屬</span>
+                        </h3>
+                        <p class="text-xs text-slate-500">自訂新身分英文代碼、中文名稱與對應權限。</p>
+                        <div class="space-y-3">
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">英文代碼</label>
+                                    <input id="customRoleId" type="text" placeholder="e.g. VIP" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">顯示中文名稱</label>
+                                    <input id="customRoleName" type="text" placeholder="e.g. 貴賓" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-500 uppercase mb-2">權限配置</label>
+                                <div class="space-y-1.5 bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs">
+                                    <label class="flex items-center space-x-2 cursor-pointer">
+                                        <input type="checkbox" id="perm_accessAdmin" class="rounded text-indigo-600 focus:ring-indigo-500">
+                                        <span>進入後台管理權限</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 cursor-pointer">
+                                        <input type="checkbox" id="perm_editNotice" class="rounded text-indigo-600 focus:ring-indigo-500">
+                                        <span>修改全站公告設定</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 cursor-pointer">
+                                        <input type="checkbox" id="perm_editWelcome" class="rounded text-indigo-600 focus:ring-indigo-500">
+                                        <span>修改註冊歡迎設定</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 cursor-pointer">
+                                        <input type="checkbox" id="perm_editFarewell" class="rounded text-indigo-600 focus:ring-indigo-500">
+                                        <span>修改離別與試算表設定</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 cursor-pointer">
+                                        <input type="checkbox" id="perm_deleteNovel" class="rounded text-indigo-600 focus:ring-indigo-500">
+                                        <span>刪除小說權限</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">寫作章節額度上限</label>
+                                <select id="customRoleMaxChapters" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500">
+                                    <option value="4">4 章 (管理員級)</option>
+                                    <option value="12">12 章 (高階管理員級)</option>
+                                    <option value="9999">無限制 (創辦者級)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button onclick="createOrUpdateCustomRole()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold p-3 rounded-xl shadow-md transition">
+                            💾 儲存自訂身分
+                        </button>
+                        
+                        <!-- 自訂身分清單小表格 -->
+                        <div class="border-t border-slate-100 pt-3 mt-3">
+                            <h4 class="text-xs font-bold text-slate-700 mb-2">已建立的自訂身分</h4>
+                            <div class="max-h-32 overflow-y-auto no-scrollbar space-y-1.5" id="customRolesListContainer">
+                                <!-- 動態載入自訂角色 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 第二排：全站使用者身分與權限控制 -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-4">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                        <h3 class="text-lg font-bold text-slate-800 flex items-center space-x-2">
+                            <span>👥</span> <span>全站使用者身分與權限控制</span>
+                        </h3>
+                        <button onclick="loadAdminUsersList()" class="text-xs bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold px-3 py-1.5 rounded-lg transition">
+                            🔄 重新整理清單
+                        </button>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead>
+                                <tr class="border-b border-slate-100 text-slate-400 font-semibold">
+                                    <th class="py-3 px-2">暱稱/信箱</th>
+                                    <th class="py-3 px-2">配屬身分</th>
+                                    <th class="py-3 px-2">修改身分</th>
+                                    <th class="py-3 px-2">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminUsersTableBody">
+                                <!-- 動態生成使用者權限列表 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ==================== 專屬會員申請表單 Modal ==================== -->
+    <div id="membershipModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden relative border border-slate-100 flex flex-col max-h-[90vh]">
+            <!-- 標題區 -->
+            <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-4 flex justify-between items-center shrink-0">
+                <h2 class="text-xl font-bold text-white flex items-center space-x-2">
+                    <span>👑</span> <span>加入專屬會員</span>
+                </h2>
+                <button onclick="closeMembershipModal()" class="text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-1.5 rounded-lg transition">✕</button>
+            </div>
+            
+            <!-- 滾動內容區 -->
+            <div class="p-6 space-y-6 overflow-y-auto no-scrollbar flex-grow animate-scale-up">
+                <!-- 1. 你是誰 -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-bold text-slate-700 border-l-4 border-indigo-500 pl-2">1. 你是誰？</label>
+                    <div class="flex items-center space-x-2 bg-slate-50 p-3 rounded-xl border border-slate-200">
+                        <span class="font-semibold text-slate-600">5年</span>
+                        <input id="memClass" type="number" class="w-14 p-1.5 border border-slate-300 rounded-lg text-center font-bold text-indigo-700 focus:ring-2 focus:ring-indigo-500" placeholder="班">
+                        <span class="font-semibold text-slate-600">班</span>
+                        <input id="memNum" type="number" class="w-14 p-1.5 border border-slate-300 rounded-lg text-center font-bold text-indigo-700 focus:ring-2 focus:ring-indigo-500" placeholder="號">
+                        <span class="font-semibold text-slate-600">號</span>
+                        <input id="memName" type="text" class="flex-grow p-1.5 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500" placeholder="你的名字">
+                    </div>
+                </div>
+
+                <!-- 2. 會員等級 -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-bold text-slate-700 border-l-4 border-amber-500 pl-2">2. 選擇會員等級</label>
+                    <select id="memTier" onchange="updateMembershipPerks()" class="w-full p-3 bg-white border border-slate-300 rounded-xl text-sm font-semibold text-slate-700 focus:ring-2 focus:ring-amber-500 cursor-pointer shadow-sm">
+                        <option value="Bluecat's Fans">🐱 Bluecat's Fans</option>
+                        <option value="Bucket's Fans">🪣 Bucket's Fans</option>
+                        <option value="Eason's Fans">😎 Eason's Fans</option>
+                        <option value="WeiWei's Friends">🏠 WeiWei's Friends</option>
+                        <option value="Sus Guys">🗣️ Sus Guys</option>
+                    </select>
+                </div>
+
+                <!-- 3. 你的會員可以幹嘛 (動態權益展示) -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-bold text-slate-700 border-l-4 border-emerald-500 pl-2">專屬特權與優點</label>
+                    <div class="bg-gradient-to-br from-slate-50 to-indigo-50 border border-indigo-100 rounded-xl p-4">
+                        <ul id="memPerksList" class="space-y-2 text-sm text-slate-700 font-medium">
+                            <!-- JS 動態生成階級權益 -->
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 4. 為何加入 -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-bold text-slate-700 border-l-4 border-rose-500 pl-2">3. 為何加入會員？</label>
+                    <textarea id="memReason" rows="2" class="w-full p-3 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-rose-500" placeholder="請告訴我們你加入的理由..."></textarea>
+                </div>
+
+                <!-- 5. 加入條件 -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-bold text-slate-700 border-l-4 border-purple-500 pl-2">4. 加入會員的條件是？</label>
+                    <textarea id="memCondition" rows="2" class="w-full p-3 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-purple-500" placeholder="你認為加入此階級需要具備什麼條件..."></textarea>
+                </div>
+            </div>
+
+            <!-- 底部按鈕區 -->
+            <div class="p-4 border-t border-slate-100 bg-slate-50 shrink-0">
+                <button onclick="submitMembershipForm()" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-3.5 rounded-xl shadow-lg hover:shadow-indigo-500/30 transition-all transform active:scale-95">
+                    🚀 立即送出申請
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ==================== 自訂模態對話視窗 (取代原生的 Alert / Confirm) ==================== -->
+    <div id="customAlertModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden border border-slate-100 p-6 space-y-4 animate-scale-up">
+            <div class="flex items-center space-x-2 text-indigo-600">
+                <span class="text-xl" id="customAlertIcon">ℹ️</span>
+                <h4 class="font-bold text-slate-800" id="customAlertTitle">系統提示</h4>
+            </div>
+            <p class="text-sm text-slate-600 leading-relaxed" id="customAlertMessage">提示內容</p>
+            <div class="flex justify-end">
+                <button onclick="closeCustomAlert()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm px-5 py-2 rounded-xl transition">
+                    確定
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="customConfirmModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden border border-slate-100 p-6 space-y-4 animate-scale-up">
+            <div class="flex items-center space-x-2 text-amber-500">
+                <span class="text-xl">⚠️</span>
+                <h4 class="font-bold text-slate-800" id="customConfirmTitle">請確認動作</h4>
+            </div>
+            <p class="text-sm text-slate-600 leading-relaxed" id="customConfirmMessage">確認內容</p>
+            <div class="flex justify-end space-x-2">
+                <button onclick="closeCustomConfirm(false)" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold text-sm px-4 py-2 rounded-xl transition">
+                    取消
+                </button>
+                <button onclick="closeCustomConfirm(true)" class="bg-rose-600 hover:bg-rose-700 text-white font-semibold text-sm px-4 py-2 rounded-xl transition">
+                    確定
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 登入/註冊彈窗 -->
+    <div id="loginModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden relative border border-slate-100">
+            <button onclick="closeLoginModal()" class="absolute right-4 top-4 text-slate-400 hover:text-slate-600">✕</button>
+            <div class="flex border-b border-slate-100">
+                <button onclick="toggleLoginTab('login')" id="modalTab-login" class="flex-1 py-4 text-center font-bold text-sm border-b-2 border-indigo-600 text-indigo-600">會員登入</button>
+                <button onclick="toggleLoginTab('register')" id="modalTab-register" class="flex-1 py-4 text-center font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-700">新用戶註冊</button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">電子信箱</label>
+                    <input id="loginEmail" type="email" placeholder="example@gmail.com" class="w-full p-3 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div id="registerNicknameGroup" class="hidden">
+                    <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">使用者暱稱</label>
+                    <input id="registerNickname" type="text" placeholder="這會出現在歡迎事件中..." class="w-full p-3 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">密碼</label>
+                    <input id="loginPassword" type="password" placeholder="請輸入密碼" class="w-full p-3 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <button id="modalSubmitBtn" onclick="submitAuthForm()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold p-3 rounded-xl shadow-md transition">
+                    立即登入
+                </button>
+                <div class="text-center text-xs text-slate-400">
+                    <p id="authHelperText">提示：管理員可用帳密 admin@gmail.com / 123456 直接登入後台</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 小說目錄側邊欄 -->
+    <div id="chapterListModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex justify-end hidden">
+        <div class="bg-white w-full max-w-sm h-full flex flex-col p-6 shadow-xl relative animate-slide-left">
+            <button onclick="toggleChapterListModal()" class="absolute left-6 top-6 text-slate-400 hover:text-slate-600 text-lg">✕</button>
+            <div class="mt-8 flex-grow flex flex-col justify-between overflow-hidden">
+                <div class="overflow-y-auto no-scrollbar space-y-4">
+                    <h3 class="text-xl font-bold text-slate-800">📖 作品目錄</h3>
+                    <div id="chapterListContainer" class="space-y-1"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 模擬系統通知欄 ==================== -->
+    <div id="toastNotification" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 pointer-events-none transition-all duration-300 max-w-sm w-full bg-white rounded-2xl shadow-xl border border-slate-100 p-4 flex items-start space-x-3">
+        <div class="bg-indigo-100 p-2 rounded-xl text-indigo-600" id="toastIcon">📢</div>
+        <div class="flex-grow">
+            <div class="text-xs font-bold text-indigo-500 uppercase" id="toastChannelName">#WELCOME-ROOM</div>
+            <div class="text-sm font-semibold text-slate-800 mt-0.5" id="toastMessage">歡迎加入網站！</div>
+        </div>
+        <button onclick="hideToast()" class="text-slate-400 hover:text-slate-600">✕</button>
+    </div>
+
+    <!-- ==================== 核心 JavaScript 處理代碼 ==================== -->
+    <script>
+        const defaultNovels = [
+            {
+                id: "novel-510-daily",
+                title: "510教室的日常：午餐趣事&八卦小站",
+                author: "510觀察員",
+                cover: "🏫",
+                description: "新北市中和區復興國小五年10班最精采好笑的每日生活！從午餐盛飯隊伍的電競爭霸、小少少的黑板危機，到大下課傳遍全班的『外套』浪漫八卦，帶你一同體驗青春無敵的課堂歲月！",
+                chapters: [
+                    {
+                        id: "chap-510-1",
+                        title: "第一章：盛飯隊伍的電競爭鋒",
+                        content: "[場景：復興國小 五年10班教室 / 後方盛飯區]\n\n午餐鐘聲響起，全班排成一條長龍不分男女混在一起。宋家和拿著碗排在隊伍裡，想起昨晚的戰績，忍不住大聲抱怨：\n\n宋家和：\n「唉，昨天被桂哥打爆，他是外掛吧……」\n\n排在宋家和後面的1號許晞本手裡拿著碗，對著宋家和翻了一個大白眼，直接開始瘋狂諷刺：\n\n許晞本：\n「宋家和，你自己也知道自己的實力，被我打到5:3，那三分都賽到的，不要在那邊『炫耀』你的好成績 :)」\n\n宋家和：\n「許晞本！你被我打贏3分之後直接拿噴火槍彈弓打我，那麼弱不要說話啦！明天跟我單挑啊！~」"
+                    },
+                    {
+                        id: "chap-510-2",
+                        title: "第二章：黑板危機與裝菜小山",
+                        content: "這時，排在更後面的6號桂祥騰一臉興奮地伸長脖子大喊：\n「單挑？你確定嗎？你連我都打不過。上次說要抱曹棋棋已經放過你了，我跟你單挑你被5:1，而且我可沒有學許晞本拿噴火槍（我沒有）。不過我還是去玩《三角洲》比較好，《競爭者》爛爆了！」\n\n許晞本一聽，趕緊小聲點了一下桂祥騰叫他安靜。直到兩個人轉頭看向黑板，才發現上面不知道什麼時候已經被小少少記了 6 x 5 跟 12 x 2。大家馬上閉嘴，瞬間安靜了下來……\n\n此時，輪到曹棋棋裝飯。她拿飯匙裝了億點點飯、裝了一顆蛋、裝了半根蔬菜，然後就迅速回到座位拿她的湯碗，裝了億點點湯。前後花不到5分鐘，就把午餐解決了。\n\n曹棋棋：\n「今天這菜很難吃，所以裝半根就好。」\n\n排在旁邊的葉筳榆看著曹棋棋的碗，表示無語：\n「你每次都裝這麼少，等一下真的不會餓嗎？」\n\n另一邊，桂祥騰端著他那只有薄薄一層底部白飯、連一片菜葉都沒有的碗，湊到謝易霖旁邊突然冒出一句：\n「欸，謝易霖，你到底有沒有玩三角洲啊？」\n\n謝易霖（一邊吃飯一邊翻白眼）：\n「哥們你排隊盛飯也可以扯到三角洲，然後你是不是沒裝菜，給我回去裝菜啦！」\n\n最後輪到許晞本，他看著剩下的菜，開始瘋狂把大陸妹和A菜往自己盤子裡塞，堆得像一座小山，最後擺上一顆搖墜的茶葉蛋。\n\n宋家和：\n「開玩笑，許晞本，你確定裝這麼多嗎？」\n\n許晞本:\n「不然呢？」"
+                    },
+                    {
+                        id: "chap-510-3",
+                        title: "第三章：跌倒意外與怪北北的關心",
+                        content: "[場景：五年10班教室 / 第二節大下課]\n\n下課時間，謝易霖在走廊上興奮地玩著棒球手套，一不小心跟別人大擦撞，整個人慘摔跌在地上。許晞本看到，第一時間整個人「飛」過去看他怎麼樣。\n\n許晞本（緊緊抓住謝易霖的手臂，滿臉怪北北的眼神看著他）：\n「欸你還好嗎？要不要去健康中心？手斷了嗎？如果斷了，怎麼做專題研究啊？我們還要做喇叭欸！」\n\n謝易霖（一邊黑線地站起來，拍拍灰塵）：\n「……許晞本我只是跌倒，不要詛咒我好不好！」"
+                    },
+                    {
+                        id: "chap-510-4",
+                        title: "第四章：外套風波與這就是510！",
+                        content: "起身後，旁邊的宋家和眼神突然瞄到教室中央。曹棋棋跟葉筳榆正靠在一起聊天（耍gay 內心:沒事）。宋家和立刻撥了撥瀏海，開啟「耍帥模式」大步走過去。\n\n宋家和（直接湊到曹棋棋邊，故意壓低聲音）：\n「棋棋姐姐，借我課本……」\n\n話還沒說完，宋家和居然直接伸手拿起曹棋棋掛在椅子上的外套，當著大家的面直接穿了上去！\n\n周圍的男生瞬間爆出雷鳴般的起鬨聲：\n「喔————！！又來了！宋家和又在穿她外套了ㄟ！帥喔!（誤）」\n\n曹棋棋（站在旁邊，滿臉無語）：\n「宋家和！！！你不要又穿我外套好不好，我都洗過很多件了……」\n\n許晞本（在旁邊三八步，再度露出怪北北的表情）：\n「宋家和，你好像把她穿過的都穿了，而且她說這件好像是她姊的QQ。」\n\n葉筳榆（也跟著曹棋棋一起翻白眼，無奈地說）：\n「宋家和，全班都知道你喜歡她啦！但你真的很噁欸，上次體育課喝她水壺，她還沒管你欸！」\n\n宋家和完全沒有要理葉筳榆的意思，當作沒聽到，自顧自的跑去找其他男生聊天了。\n\n\n【尾聲：這就是510！】\n\n午後金黃色的夕陽斜斜地照進新北市中和區復興國小五年10班的窗戶。\n\n這就是屬於這群朋友們最真實、最精彩的日常——有連勝和落敗的電競恩怨、有怪北北的關心眼神、有不小心在黑板上留下的記號、有五分鐘神速吃完的午餐，還有那個全班皆知、每天樂此不疲的外套大八卦。\n\n（全劇終）"
+                    }
+                ]
+            },
+            {
+                id: "novel-fantasy",
+                title: "劍御九重天",
+                author: "風中行者",
+                cover: "⚔️",
+                description: "少年背負家仇，手持一柄無名鏽劍，一躍踏入這充滿弱肉強食、仙魔並起的神州浩土，看他如何劍破長空，獨步仙道九重天。",
+                chapters: [
+                    {
+                        id: "chap-fy-1",
+                        title: "第一章：破落少年與鏽劍",
+                        content: "清晨的落葉城下著淅淅瀝瀝的小雨。\n\n林楓抱著那一柄從柴房角落撿來的無名鏽劍，呆呆地坐在台階上。三天前，林家在落葉城一夜之間被仇家所滅，只有他這個被視為修煉廢柴的庶子僥倖從狗洞逃生。\n\n「仙魔兩立，實力為尊...」林楓看著自己雙手因為磨擦而起的血泡，一雙黑眸閃爍著冰冷而堅定的光芒。\n\n林楓猛然拔出鏽劍，劍身斑駁不堪，甚至連一絲靈力波動都感受不到。然而，當雨水滴落在劍尖的刹那，林楓的心海之中忽然傳來一聲遠古巨獸般的低吟。\n\n『小傢伙，你想要報仇嗎？』一個蒼老而霸道無邊的聲音，自劍身深處轟然響徹他的識海！"
+                    }
+                ]
+            }
+        ];
+
+        const defaultSystemSettings = {
+            welcomeChannel: "#welcome-room",
+            welcomeMsg: "🎉 歡迎 {user} 加入星河小說空間！願我們在書香與文字的世界裡找到共鳴。",
+            farewellChannel: "#bye-bye",
+            farewellMsg: "👋 {user} 暫時離開了我們，沒關係！我們會在這裡靜靜等候你的下一次造訪。",
+            siteNoticeText: "🔥 限時福利：所有人免費會員3分鐘!!!",
+            siteNoticeActive: "true",
+            gasUrl: "https://script.google.com/macros/s/AKfycbyrkP1ae51oAIshv0P7TbjtW6XUtM0WTflkdRzPx7IRxv1Xoe5lE2sLy8P6pSfL1j8tOw/exec",
+            emailGasUrl: ""
+        };
+
+        let state = {
+            novels: [],
+            systemSettings: {},
+            currentUser: null,
+            activePage: 'home',
+            activeAdminTab: 'novels',
+            currentSelectedNovelId: null,
+            currentSelectedChapterIndex: 0,
+            authTab: 'login'
+        };
+
+        // 基礎身分中文化翻譯對照表（用於與 GAS 雲端資料庫雙向對齊轉譯）
+        const baseRoleTranslationMap = {
+            "Reader": "讀者",
+            "reader": "讀者",
+            "Bluecat's Fans": "藍貓粉絲",
+            "Bucket's Fans": "水桶粉絲",
+            "Eason's Fans": "帥霖粉絲",
+            "WeiWei's Friends": "瑋瑋鄰居",
+            "Sus Guys": "八卦小孩",
+            "Admin": "管理員",
+            "admin": "管理員",
+            "Leader": "高階管理員",
+            "ReadingMaker": "創辦者"
+        };
+        // 宣告為全域變數，避免重複宣告
+        let roleTranslationMap = { ...baseRoleTranslationMap };
+
+        // 核心 API 請求函數
+        async function runCloudApi(action, data) {
+            const url = state.systemSettings.gasUrl;
+            if (!url) return null;
+            document.getElementById('cloudSyncStatus').classList.remove('hidden');
+            document.getElementById('cloudSyncStatus').classList.add('flex');
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify({ action: action, data: data })
+                });
+                const text = await response.text();
+                const result = JSON.parse(text);
+                document.getElementById('cloudSyncStatus').classList.add('hidden');
+                document.getElementById('cloudSyncStatus').classList.remove('flex');
+                return result;
+            } catch (error) {
+                console.error("雲端同步失敗: ", error);
+                document.getElementById('cloudSyncStatus').classList.add('hidden');
+                document.getElementById('cloudSyncStatus').classList.remove('flex');
+                return null;
+            }
+        }
+
+        async function syncFromCloud() {
+            const url = state.systemSettings.gasUrl;
+            if (!url) return;
+            document.getElementById('cloudSyncStatus').classList.remove('hidden');
+            document.getElementById('cloudSyncStatus').classList.add('flex');
+            try {
+                const res = await runCloudApi("getNovels", {});
+                if (res && res.status === "success" && res.novels && res.novels.length > 0) {
+                    state.novels = res.novels;
+                    localStorage.setItem('novel_novels_data', JSON.stringify(state.novels));
+                    renderHomeNovels();
+                }
+                const resSettings = await runCloudApi("getSettings", {});
+                if (resSettings && resSettings.status === "success" && resSettings.settings) {
+                    state.systemSettings = { ...state.systemSettings, ...resSettings.settings };
+                    localStorage.setItem('novel_system_settings', JSON.stringify(state.systemSettings));
+                    applyNoticeSetting();
+                }
+            } catch (e) {
+                console.error("雲端資料拉取失敗，降級為本機模式:", e);
+            } finally {
+                document.getElementById('cloudSyncStatus').classList.add('hidden');
+                document.getElementById('cloudSyncStatus').classList.remove('flex');
+            }
+        }
+
+        function initDatabase() {
+            const storedSettings = localStorage.getItem('novel_system_settings');
+            if (storedSettings) {
+                const parsed = JSON.parse(storedSettings);
+                if (!parsed.gasUrl || parsed.gasUrl === "") parsed.gasUrl = defaultSystemSettings.gasUrl;
+                state.systemSettings = parsed;
+            } else {
+                state.systemSettings = defaultSystemSettings;
+                localStorage.setItem('novel_system_settings', JSON.stringify(defaultSystemSettings));
+            }
+
+            const storedNovels = localStorage.getItem('novel_novels_data');
+            if (storedNovels) {
+                const parsed = JSON.parse(storedNovels);
+                if (!parsed.some(n => n.id === "novel-510-daily")) {
+                    state.novels = defaultNovels;
+                    localStorage.setItem('novel_novels_data', JSON.stringify(defaultNovels));
+                } else {
+                    state.novels = parsed;
+                }
+            } else {
+                state.novels = defaultNovels;
+                localStorage.setItem('novel_novels_data', JSON.stringify(defaultNovels));
+            }
+
+            const storedUsers = localStorage.getItem('novel_users');
+            if (!storedUsers) {
+                const initialUsers = [
+                    { email: "admin@gmail.com", password: "123456", role: "Admin", nickname: "最高管理員" },
+                    { email: "reader@gmail.com", password: "123456", role: "Reader", nickname: "星光讀者" }
+                ];
+                localStorage.setItem('novel_users', JSON.stringify(initialUsers));
+            }
+
+            const sessionUser = sessionStorage.getItem('novel_active_user');
+            if (sessionUser) state.currentUser = JSON.parse(sessionUser);
+        }
+
+        function saveNovelsToStorage() {
+            localStorage.setItem('novel_novels_data', JSON.stringify(state.novels));
+            runCloudApi("saveNovels", state.novels);
+        }
+
+        // ==================== C. 自訂對話框機制 ====================
+        let currentConfirmCallback = null;
+        function showAppAlert(title, message, icon = "ℹ️") {
+            document.getElementById('customAlertTitle').innerText = title;
+            document.getElementById('customAlertMessage').innerText = message;
+            document.getElementById('customAlertIcon').innerText = icon;
+            document.getElementById('customAlertModal').classList.remove('hidden');
+        }
+        function closeCustomAlert() { document.getElementById('customAlertModal').classList.add('hidden'); }
+        function showAppConfirm(title, message, callback) {
+            document.getElementById('customConfirmTitle').innerText = title;
+            document.getElementById('customConfirmMessage').innerText = message;
+            currentConfirmCallback = callback;
+            document.getElementById('customConfirmModal').classList.remove('hidden');
+        }
+        function closeCustomConfirm(result) {
+            document.getElementById('customConfirmModal').classList.add('hidden');
+            if (currentConfirmCallback) { currentConfirmCallback(result); currentConfirmCallback = null; }
+        }
+
+        function forceResetDatabase() {
+            showAppConfirm("重置確認", "確定要將所有小說重置回預設嗎？這將會覆蓋您目前的本機修改。", (confirmed) => {
+                if (confirmed) {
+                    localStorage.removeItem('novel_novels_data');
+                    state.novels = defaultNovels;
+                    localStorage.setItem('novel_novels_data', JSON.stringify(defaultNovels));
+                    renderHomeNovels();
+                    showAppAlert("重置成功", "已成功將所有作品初始化！", "🎉");
+                }
+            });
+        }
+
+        function navigateTo(pageId) {
+            state.activePage = pageId;
+            document.getElementById('page-home').classList.add('hidden');
+            document.getElementById('page-reader').classList.add('hidden');
+            document.getElementById('page-admin').classList.add('hidden');
+            document.getElementById(`page-${pageId}`).classList.remove('hidden');
+
+            if (pageId === 'home') renderHomeNovels();
+            else if (pageId === 'admin') {
+                renderAdminNovelsTable();
+                updateChapterSelectDropdown();
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function switchAdminTab(tabId) {
+            state.activeAdminTab = tabId;
+            document.getElementById('adminTab-novels').classList.add('hidden');
+            document.getElementById('adminTab-chapters').classList.add('hidden');
+            document.getElementById('adminTab-settings').classList.add('hidden');
+            document.getElementById('adminTab-users').classList.add('hidden');
+            
+            document.getElementById('tabBtn-novels').className = "px-4 py-2 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap";
+            document.getElementById('tabBtn-chapters').className = "px-4 py-2 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap";
+            document.getElementById('tabBtn-settings').className = "px-4 py-2 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap";
+            document.getElementById('tabBtn-users').className = "px-4 py-2 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap";
+            
+            // 只有創辦者 ReadingMaker 可以看到「👥 身分與權限管理」標籤
+            if (state.currentUser && state.currentUser.role === 'ReadingMaker') {
+                document.getElementById('tabBtn-users').classList.remove('hidden');
+            } else {
+                document.getElementById('tabBtn-users').classList.add('hidden');
+            }
+
+            document.getElementById(`adminTab-${tabId}`).classList.remove('hidden');
+            document.getElementById(`tabBtn-${tabId}`).className = "px-4 py-2 text-sm font-semibold border-b-2 border-indigo-600 text-indigo-600 whitespace-nowrap";
+            
+            if (tabId === 'settings') loadSystemSettingsToInputs();
+            else if (tabId === 'chapters') updateChapterSelectDropdown();
+            else if (tabId === 'users') {
+                loadAdminUsersList();
+                updateUserRoleDropdowns();
+                renderCustomRolesList();
+            }
+        }
+
+        function scrollToNovels() { document.getElementById('novelsSection').scrollIntoView({ behavior: 'smooth' }); }
+
+        // ==================== D. 登入與會員 ====================
+        function openLoginModal() {
+            state.authTab = 'login';
+            toggleLoginTab('login');
+            document.getElementById('loginModal').classList.remove('hidden');
+        }
+        function closeLoginModal() { document.getElementById('loginModal').classList.add('hidden'); }
+        function toggleLoginTab(tab) {
+            state.authTab = tab;
+            const loginBtn = document.getElementById('modalTab-login');
+            const registerBtn = document.getElementById('modalTab-register');
+            const nicknameGroup = document.getElementById('registerNicknameGroup');
+            const submitBtn = document.getElementById('modalSubmitBtn');
+
+            if (tab === 'login') {
+                loginBtn.className = "flex-1 py-4 text-center font-bold text-sm border-b-2 border-indigo-600 text-indigo-600";
+                registerBtn.className = "flex-1 py-4 text-center font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-700";
+                nicknameGroup.classList.add('hidden');
+                submitBtn.innerText = "立即登入";
+            } else {
+                loginBtn.className = "flex-1 py-4 text-center font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-700";
+                registerBtn.className = "flex-1 py-4 text-center font-bold text-sm border-b-2 border-indigo-600 text-indigo-600";
+                nicknameGroup.classList.remove('hidden');
+                submitBtn.innerText = "註冊新帳號";
+            }
+        }
+
+        async function submitAuthForm() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const pass = document.getElementById('loginPassword').value;
+            const nickname = document.getElementById('registerNickname').value.trim();
+
+            if (!email || !pass) { showAppAlert("資訊不足", "請填寫信箱與密碼！", "⚠️"); return; }
+            const users = JSON.parse(localStorage.getItem('novel_users')) || [];
+
+            if (state.authTab === 'login') {
+                let foundUser = null;
+                const localAdmin = users.find(u => u.email === email && String(u.password) === String(pass));
+
+                if (state.systemSettings.gasUrl) {
+                    const res = await runCloudApi("login", { email, password: pass });
+                    if (res && res.status === "success") {
+                        foundUser = res.user;
+                    } else if (email === "admin@gmail.com" && String(pass) === "123456") {
+                        foundUser = { email: "admin@gmail.com", nickname: "最高管理員", role: "Admin" };
+                        runCloudApi("register", { email: "admin@gmail.com", password: "123456", role: "Admin", nickname: "最高管理員" });
+                    } else {
+                        showAppAlert("登入失敗", res ? res.message : "雲端資料庫連線超時，請確認 GAS 網頁權限為「任何人」！", "❌");
+                        return;
+                    }
+                } else {
+                    if (localAdmin) foundUser = localAdmin;
+                }
+
+                if (foundUser) {
+                    state.currentUser = foundUser;
+                    sessionStorage.setItem('novel_active_user', JSON.stringify(foundUser));
+                    updateUserUI(); renderHomeNovels(); closeLoginModal();
+                    showToast("📢 系統登入", `${foundUser.nickname}，歡迎回到星河小說空間！`, "🎉");
+                } else {
+                    showAppAlert("登入失敗", "帳號或密碼有誤！提示：admin@gmail.com / 123456", "❌");
+                }
+            } else {
+                if (!nickname) { showAppAlert("資訊不足", "註冊必須填寫您的暱稱！", "⚠️"); return; }
+                const isExist = users.some(u => u.email === email);
+                if (isExist) { showAppAlert("註冊失敗", "此電子信箱已被註冊！", "❌"); return; }
+                const newUser = { email, password: pass, role: "Reader", nickname };
+                if (state.systemSettings.gasUrl) {
+                    const res = await runCloudApi("register", newUser);
+                    if (res && res.status === "success") {
+                        state.currentUser = res.user;
+                        sessionStorage.setItem('novel_active_user', JSON.stringify(res.user));
+                        users.push(newUser); localStorage.setItem('novel_users', JSON.stringify(users));
+                        updateUserUI(); renderHomeNovels(); closeLoginModal();
+                        const welcomeChan = state.systemSettings.welcomeChannel || "#welcome-room";
+                        const welcomeMsgTemplate = state.systemSettings.welcomeMsg || "歡迎 {user} 加入！";
+                        showToast(welcomeChan, welcomeMsgTemplate.replace("{user}", nickname), "👋");
+                        return;
+                    } else if (res && res.status === "error") {
+                        showAppAlert("註冊失敗", res.message, "❌"); return;
+                    }
+                }
+                users.push(newUser); localStorage.setItem('novel_users', JSON.stringify(users));
+                state.currentUser = newUser; sessionStorage.setItem('novel_active_user', JSON.stringify(newUser));
+                updateUserUI(); renderHomeNovels(); closeLoginModal();
+                const welcomeChan = state.systemSettings.welcomeChannel || "#welcome-room";
+                const welcomeMsgTemplate = state.systemSettings.welcomeMsg || "歡迎 {user} 加入！";
+                showToast(welcomeChan, welcomeMsgTemplate.replace("{user}", nickname), "👋");
+            }
+        }
+
+        function handleLogout() {
+            try {
+                if (state.currentUser) {
+                    const farewellChan = state.systemSettings.farewellChannel || "#bye-bye";
+                    const farewellMsgTemplate = state.systemSettings.farewellMsg || "{user} 離開了我們。";
+                    showToast(farewellChan, farewellMsgTemplate.replace("{user}", state.currentUser.nickname), "😢");
+                }
+            } catch(e) {}
+            state.currentUser = null;
+            sessionStorage.removeItem('novel_active_user');
+            updateUserUI(); renderHomeNovels();
+            navigateTo('home');
+        }
+
+        function updateUserUI() {
+            const adminBtn = document.getElementById('adminPortalBtn');
+            const navLoginBtn = document.getElementById('navLoginBtn');
+            const userInfoArea = document.getElementById('userInfoArea');
+            const userNickname = document.getElementById('userNickname');
+            const userRoleBadge = document.getElementById('userRoleBadge');
+            const tabBtnUsers = document.getElementById('tabBtn-users');
+
+            if (state.currentUser) {
+                navLoginBtn.classList.add('hidden');
+                userInfoArea.classList.remove('hidden');
+                userNickname.innerText = state.currentUser.nickname;
+                
+                // 將後台的英文身分代碼轉換為前台的中文顯示
+                userRoleBadge.innerText = roleTranslationMap[state.currentUser.role] || state.currentUser.role;
+                
+                const hasAdminAccess = hasPermission('accessAdmin');
+                if (hasAdminAccess) {
+                    adminBtn.classList.remove('hidden');
+                } else {
+                    adminBtn.classList.add('hidden');
+                }
+
+                // 創辦者才可看見身分與權限控制按鈕
+                if (state.currentUser.role === 'ReadingMaker') {
+                    tabBtnUsers.classList.remove('hidden');
+                } else {
+                    tabBtnUsers.classList.add('hidden');
+                }
+            } else {
+                navLoginBtn.classList.remove('hidden');
+                userInfoArea.classList.add('hidden');
+                adminBtn.classList.add('hidden');
+                tabBtnUsers.classList.add('hidden');
+            }
+        }
+
+        let toastTimeout;
+        function showToast(channelName, msg, emoji = "📢") {
+            const toast = document.getElementById('toastNotification');
+            document.getElementById('toastIcon').innerText = emoji;
+            document.getElementById('toastChannelName').innerText = (channelName || "SYSTEM").toUpperCase();
+            document.getElementById('toastMessage').innerText = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => { hideToast(); }, 6000);
+        }
+        function hideToast() {
+            const toast = document.getElementById('toastNotification');
+            toast.classList.remove('translate-y-0', 'opacity-100');
+            toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+        }
+
+        // ==================== F. 小說展示 ====================
+        function renderHomeNovels() {
+            const shelf = document.getElementById('novelShelf');
+            const grid = document.getElementById('novelGrid');
+            document.getElementById('novelCount').innerText = state.novels.length;
+            shelf.innerHTML = ''; grid.innerHTML = '';
+
+            state.novels.forEach(novel => {
+                const totalChapters = novel.chapters ? novel.chapters.length : 0;
+                
+                // 計算並記憶進度
+                let progressIndex = 0;
+                if (state.currentUser) {
+                    const progressKey = `novel_progress_${state.currentUser.email}_${novel.id}`;
+                    const savedIndex = localStorage.getItem(progressKey);
+                    if (savedIndex !== null) progressIndex = parseInt(savedIndex);
+                }
+                
+                const hasProgress = state.currentUser && localStorage.getItem(`novel_progress_${state.currentUser.email}_${novel.id}`) !== null;
+                const btnText = hasProgress ? `繼續閱讀 第${progressIndex + 1}章 →` : "開始閱讀 →";
+                const btnClass = hasProgress ? "bg-emerald-600 hover:bg-emerald-700" : "bg-indigo-600 hover:bg-indigo-700";
+
+                const shelfCard = document.createElement('div');
+                shelfCard.className = "min-w-[280px] md:min-w-[320px] max-w-[320px] bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between snap-start shrink-0";
+                shelfCard.innerHTML = `
+                    <div class="space-y-4">
+                        <div class="flex items-start justify-between">
+                            <span class="text-4xl bg-indigo-50 p-3 rounded-2xl select-none">${novel.cover || '📖'}</span>
+                            <span class="bg-indigo-50 text-indigo-700 text-[10px] font-bold px-2 py-1 rounded-full border border-indigo-100">Hot 連載中</span>
+                        </div>
+                        <div class="space-y-1">
+                            <h3 class="font-bold text-slate-800 text-lg line-clamp-1 group-hover:text-indigo-600 transition">${novel.title}</h3>
+                            <div class="text-xs text-slate-400">作者: <span class="font-medium text-slate-600">${novel.author}</span></div>
+                        </div>
+                        <p class="text-slate-500 text-xs leading-relaxed line-clamp-3">${novel.description}</p>
+                    </div>
+                    <div class="border-t border-slate-100 pt-4 mt-4 flex items-center justify-between">
+                        <span class="text-xs font-semibold text-slate-400 flex items-center space-x-1">
+                            <span>📖</span> <span>${totalChapters} 章節</span>
+                        </span>
+                        <button onclick="startReading('${novel.id}')" class="${btnClass} text-white text-xs font-bold px-4 py-2 rounded-xl transition">
+                            ${btnText}
+                        </button>
+                    </div>
+                `;
+                shelf.appendChild(shelfCard);
+
+                const gridCard = document.createElement('div');
+                gridCard.className = "bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md transition duration-200 flex flex-col justify-between";
+                gridCard.innerHTML = `
+                    <div class="space-y-3">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-3xl bg-slate-50 p-2.5 rounded-xl select-none">${novel.cover || '📖'}</span>
+                            <div>
+                                <h3 class="font-bold text-slate-800 text-base line-clamp-1">${novel.title}</h3>
+                                <span class="text-xs text-slate-400">作者: ${novel.author}</span>
+                            </div>
+                        </div>
+                        <p class="text-slate-500 text-xs leading-relaxed line-clamp-2">${novel.description}</p>
+                    </div>
+                    <div class="border-t border-slate-100 pt-3 mt-4 flex items-center justify-between">
+                        <span class="text-xs text-indigo-500 font-semibold">${totalChapters} 章</span>
+                        <button onclick="startReading('${novel.id}')" class="text-indigo-600 hover:text-indigo-700 text-xs font-bold px-3 py-1 rounded-lg hover:bg-indigo-50 transition">
+                            快速閱讀
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(gridCard);
+            });
+        }
+        function scrollShelf(dir) { document.getElementById('novelShelf').scrollBy({ left: dir === 'left' ? -340 : 340, behavior: 'smooth' }); }
+
+        // ==================== G. 閱讀器模組 ====================
+        function startReading(novelId) {
+            const novel = state.novels.find(n => n.id === novelId);
+            if (!novel || !novel.chapters || novel.chapters.length === 0) { showAppAlert("即將推出", "此部作品目前尚未新增任何章節！", "📖"); return; }
+
+            state.currentSelectedNovelId = novelId;
+            let progressIndex = 0;
+            if (state.currentUser) {
+                const progressKey = `novel_progress_${state.currentUser.email}_${novelId}`;
+                const savedIndex = localStorage.getItem(progressKey);
+                if (savedIndex !== null) progressIndex = parseInt(savedIndex);
+            }
+            state.currentSelectedChapterIndex = progressIndex;
+            renderReaderChapter();
+            navigateTo('reader');
+        }
+
+        function renderReaderChapter() {
+            const novel = state.novels.find(n => n.id === state.currentSelectedNovelId);
+            const idx = state.currentSelectedChapterIndex;
+            const chapter = novel.chapters[idx];
+            document.getElementById('readerNovelName').innerText = `《 ${novel.title} 》`;
+            document.getElementById('readerChapterTitle').innerText = chapter.title;
+            document.getElementById('readerContent').innerText = chapter.content;
+
+            const prevBtn = document.getElementById('prevChapterBtn');
+            const nextBtn = document.getElementById('nextChapterBtn');
+            idx === 0 ? prevBtn.classList.add('opacity-40', 'pointer-events-none') : prevBtn.classList.remove('opacity-40', 'pointer-events-none');
+            
+            if (idx >= novel.chapters.length - 1) {
+                nextBtn.innerText = "已完結"; nextBtn.classList.add('bg-slate-500', 'hover:bg-slate-500');
+            } else {
+                nextBtn.innerText = "下一章";
+                nextBtn.classList.remove('bg-slate-500', 'hover:bg-slate-500');
+            }
+
+            // 保存用戶進度並備份至雲端
+            if (state.currentUser) {
+                const progressKey = `novel_progress_${state.currentUser.email}_${state.currentSelectedNovelId}`;
+                localStorage.setItem(progressKey, idx);
+                runCloudApi("saveProgress", {
+                    email: state.currentUser.email,
+                    novelId: state.currentSelectedNovelId,
+                    chapterIndex: idx
+                });
+            }
+        }
+
+        function prevChapter() {
+            if (state.currentSelectedChapterIndex > 0) {
+                state.currentSelectedChapterIndex--;
+                renderReaderChapter();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function nextChapter() {
+            const n = state.novels.find(n => n.id === state.currentSelectedNovelId);
+            if (state.currentSelectedChapterIndex < n.chapters.length - 1) {
+                state.currentSelectedChapterIndex++;
+                renderReaderChapter();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+        
+        let currentFontSize = 18;
+        function changeFontSize(d) { currentFontSize = Math.max(14, Math.min(32, currentFontSize + d)); document.getElementById('readerContent').style.fontSize = `${currentFontSize}px`; }
+        function setTheme(theme) {
+            const box = document.getElementById('readerBox');
+            box.className = "p-6 md:p-10 rounded-2xl shadow-sm border min-h-[500px] flex flex-col justify-between transition-all duration-200";
+            if (theme === 'light') { box.classList.add('bg-white', 'border-slate-100', 'text-slate-800'); document.getElementById('readerContent').className = "text-lg leading-relaxed text-slate-700 whitespace-pre-wrap min-h-[300px] font-serif"; }
+            else if (theme === 'eyecare') { box.classList.add('bg-eyecare', 'border-amber-200/40', 'text-eyecaretext'); document.getElementById('readerContent').className = "text-lg leading-relaxed text-[#4a3319] whitespace-pre-wrap min-h-[300px] font-serif"; }
+            else if (theme === 'sepia') { box.classList.add('bg-amber-100/50', 'border-orange-200/40', 'text-amber-950'); document.getElementById('readerContent').className = "text-lg leading-relaxed text-amber-900 whitespace-pre-wrap min-h-[300px] font-serif"; }
+            else if (theme === 'dark') { box.classList.add('bg-slate-800', 'border-slate-700', 'text-slate-100'); document.getElementById('readerContent').className = "text-lg leading-relaxed text-slate-300 whitespace-pre-wrap min-h-[300px] font-serif"; }
+        }
+
+        function toggleChapterListModal() {
+            const modal = document.getElementById('chapterListModal'); modal.classList.toggle('hidden');
+            if (!modal.classList.contains('hidden')) {
+                const container = document.getElementById('chapterListContainer'); container.innerHTML = '';
+                const novel = state.novels.find(n => n.id === state.currentSelectedNovelId);
+                if (novel && novel.chapters) {
+                    novel.chapters.forEach((chap, idx) => {
+                        const item = document.createElement('button');
+                        item.className = `w-full text-left p-3 rounded-xl text-sm transition ${idx === state.currentSelectedChapterIndex ? "bg-indigo-50 text-indigo-600 font-bold" : "text-slate-600 hover:bg-slate-50"}`;
+                        item.innerText = chap.title;
+                        item.onclick = () => { state.currentSelectedChapterIndex = idx; renderReaderChapter(); toggleChapterListModal(); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+                        container.appendChild(item);
+                    });
+                }
+            }
+        }
+
+        // ==================== Z. 會員申請專區 (階級與Email) ====================
+        const tierPerksMap = {
+            "Bluecat's Fans": ["✓ 評論小說", "🎁 獲得 666 的吳少騏簽名簽名", "🍪 獲得 迷你燕麥餅 X 1"],
+            "Bucket's Fans": ["🤝 成為 wenio0509 的好友", "✨ 獲得 666666 的宋家和簽名", "💖 非常感謝您的支持！"],
+            "Eason's Fans": ["😎 獲得 okok 的謝易霖簽名", "📖 擁有請求添加全新小說的權力"],
+            "WeiWei's Friends": ["🏠 非常非常感謝你", "✍️ 可以直接新增小說"],
+            "Sus Guys": ["👑 無庸置疑的最高身分"]
+        };
+        const tierOrder = ["Bluecat's Fans", "Bucket's Fans", "Eason's Fans", "WeiWei's Friends", "Sus Guys"];
+
+        // 英文權利身分與中文化徽章配屬對應(前台顯示)
+        const membershipBadgeChineseMap = {
+            "Bluecat's Fans": "藍貓粉絲",
+            "Bucket's Fans": "水桶粉絲",
+            "Eason's Fans": "帥霖粉絲",
+            "WeiWei's Friends": "瑋瑋鄰居",
+            "Sus Guys": "八卦小孩"
+        };
+
+        function handleJoinMembershipBtn() {
+            if (!state.currentUser) {
+                showAppAlert("登入提示", "必須登入基本會員才能填寫專屬申請表！", "⚠️");
+                openLoginModal();
+            } else {
+                document.getElementById('membershipModal').classList.remove('hidden');
+                updateMembershipPerks(); // 初始化選項
+            }
+        }
+
+        function closeMembershipModal() {
+            document.getElementById('membershipModal').classList.add('hidden');
+        }
+
+        function updateMembershipPerks() {
+            const selectedTier = document.getElementById('memTier').value;
+            const targetIdx = tierOrder.indexOf(selectedTier);
+            const listContainer = document.getElementById('memPerksList');
+            listContainer.innerHTML = '';
+            
+            // 權益疊加：遞迴將當前與更低階的特權都抓取出來
+            for (let i = 0; i <= targetIdx; i++) {
+                const tierName = tierOrder[i];
+                const perks = tierPerksMap[tierName];
+                perks.forEach(perk => {
+                    const li = document.createElement('li');
+                    li.className = "flex items-start space-x-2";
+                    li.innerHTML = `<span class="text-indigo-500 mt-0.5">•</span> <span>${perk}</span>`;
+                    listContainer.appendChild(li);
+                });
+            }
+        }
+
+        async function submitMembershipForm() {
+            const mClass = document.getElementById('memClass').value;
+            const mNum = document.getElementById('memNum').value;
+            const mName = document.getElementById('memName').value;
+            const mTier = document.getElementById('memTier').value;
+            const mReason = document.getElementById('memReason').value;
+            const mCondition = document.getElementById('memCondition').value;
+
+            if (!mClass || !mNum || !mName || !mReason || !mCondition) {
+                showAppAlert("欄位未填", "請將「你是誰」、「為何加入」與「加入條件」填寫完整！", "⚠️");
+                return;
+            }
+
+            const mailData = {
+                classNum: mClass,
+                studentNum: mNum,
+                studentName: mName,
+                membershipTier: membershipBadgeChineseMap[mTier] || mTier, // 寄出的信件也使用中文名稱，更具親切感
+                joinReason: mReason,
+                joinCondition: mCondition,
+                email: state.currentUser.email
+            };
+
+            const emailApiUrl = state.systemSettings.emailGasUrl;
+            
+            if (!emailApiUrl) {
+                showAppAlert("無法寄送", "請先至後台系統設定中填入「Email Apps Script URL」！", "❌");
+                return;
+            }
+
+            try {
+                // 背景發送 Email (利用 no-cors 規避跨域限制)
+                fetch(emailApiUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify(mailData)
+                });
+                
+                showAppAlert("申請已送出！", "您的專屬會員申請已成功寄送給管理員審核！", "✅");
+                closeMembershipModal();
+
+                // 清空表單
+                document.getElementById('memClass').value = '';
+                document.getElementById('memNum').value = '';
+                document.getElementById('memName').value = '';
+                document.getElementById('memReason').value = '';
+                document.getElementById('memCondition').value = '';
+                
+            } catch (error) {
+                showAppAlert("寄送失敗", "網路或 API 發生錯誤。", "❌");
+            }
+        }
+
+        // ==================== H. 後台管理 ====================
+        // 動態權益判斷系統 (核心隔離關鍵)
+        function hasPermission(action) {
+            if (!state.currentUser) return false;
+            const role = state.currentUser.role;
+            if (role === 'ReadingMaker') return true; // 創辦者擁有全站最高權限
+
+            // 高階管理員預設權限
+            if (role === 'Leader') {
+                if (action === 'accessAdmin') return true;
+                if (action === 'editNotice') return true;
+                if (action === 'editWelcome') return true;
+                if (action === 'maxChapters') return 12;
+                return false;
+            }
+
+            // 管理員預設權限
+            if (role === 'Admin' || role === 'admin') {
+                if (action === 'accessAdmin') return true;
+                if (action === 'editNotice') return true;
+                if (action === 'maxChapters') return 4;
+                return false;
+            }
+
+            // 尋找自訂身分權限
+            const customRoles = getCustomRoles();
+            const customRole = customRoles.find(r => r.id === role);
+            if (customRole) {
+                if (action === 'maxChapters') return parseInt(customRole.maxChapters || 4);
+                return !!customRole.permissions[action];
+            }
+
+            return false;
+        }
+
+        function renderAdminNovelsTable() {
+            const body = document.getElementById('adminNovelTableBody'); body.innerHTML = '';
+            
+            // 動態調整操作列標題：只有當前帳號有 'deleteNovel' 權限才顯示操作列
+            const canDelete = hasPermission('deleteNovel');
+            const adminNovelActionHeader = document.getElementById('adminNovelActionHeader');
+            if (adminNovelActionHeader) {
+                if (canDelete) {
+                    adminNovelActionHeader.classList.remove('hidden');
+                } else {
+                    adminNovelActionHeader.classList.add('hidden');
+                }
+            }
+
+            state.novels.forEach(novel => {
+                const tr = document.createElement('tr'); tr.className = "border-b border-slate-100 hover:bg-slate-50 transition";
+                tr.innerHTML = `
+                    <td class="py-4 px-4 text-2xl select-none">${novel.cover || '📖'}</td>
+                    <td class="py-4 px-4 font-bold text-slate-800">${novel.title}</td>
+                    <td class="py-4 px-4 text-slate-500">${novel.author}</td>
+                    <td class="py-4 px-4 font-semibold text-indigo-600">${novel.chapters ? novel.chapters.length : 0} 章</td>
+                    ${canDelete ? `
+                    <td class="py-4 px-4 space-x-2">
+                        <button onclick="deleteNovelData('${novel.id}')" class="text-xs bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold px-3 py-1.5 rounded-lg transition">刪除</button>
+                    </td>` : ''}`;
+                body.appendChild(tr);
+            });
+        }
+
+        function createNewNovel() {
+            const title = document.getElementById('newNovelTitle').value.trim(); const author = document.getElementById('newNovelAuthor').value.trim();
+            if (!title || !author) { showAppAlert("欄位遺漏", "小說名稱與作者名字為必填項目！", "⚠️"); return; }
+            state.novels.push({ id: `novel-${Date.now()}`, title, author, cover: document.getElementById('newNovelCover').value.trim() || '📖', description: document.getElementById('newNovelDesc').value.trim() || "目前暫無簡介說明。", chapters: [] });
+            saveNovelsToStorage(); renderAdminNovelsTable(); updateChapterSelectDropdown();
+            document.getElementById('newNovelTitle').value = ''; document.getElementById('newNovelAuthor').value = ''; document.getElementById('newNovelCover').value = ''; document.getElementById('newNovelDesc').value = '';
+            showAppAlert("發布成功", `小說《${title}》已成功上架！`, "🎉");
+        }
+
+        function deleteNovelData(novelId) {
+            showAppConfirm("確定刪除", "確定要完全刪除這部作品嗎？", (confirmed) => {
+                if (confirmed) { state.novels = state.novels.filter(n => n.id !== novelId); saveNovelsToStorage(); renderAdminNovelsTable(); updateChapterSelectDropdown(); showAppAlert("刪除成功", "已將作品從列表中移除。", "🗑️"); }
+            });
+        }
+
+        function updateChapterSelectDropdown() {
+            const select = document.getElementById('chapterNovelSelect'); select.innerHTML = '';
+            state.novels.forEach(novel => { const opt = document.createElement('option'); opt.value = novel.id; opt.innerText = novel.title; select.appendChild(opt); });
+        }
+
+        function saveChapterData() {
+            const novelId = document.getElementById('chapterNovelSelect').value; const title = document.getElementById('chapterTitle').value.trim(); const content = document.getElementById('chapterContent').value.trim();
+            if (!novelId || !title || !content) { showAppAlert("提示", "請完整填寫章節名稱與內文！", "⚠️"); return; }
+            const novel = state.novels.find(n => n.id === novelId);
+            if (novel) {
+                if (!novel.chapters) novel.chapters = [];
+                
+                // 實作限制：依照權限阻擋章節新增 (管理員 4 章、高階管理員 12 章、創辦者與自訂章節上限額度不限)
+                const maxAllowed = hasPermission('maxChapters');
+                if (novel.chapters.length >= maxAllowed) {
+                    showAppAlert("權限限制", `您的權限在每部小說中最多隻能建立 ${maxAllowed} 章！請聯絡創辦者升級您的職位。`, "⚠️");
+                    return;
+                }
+
+                novel.chapters.push({ id: `chap-${Date.now()}`, title, content });
+                saveNovelsToStorage(); document.getElementById('chapterTitle').value = ''; document.getElementById('chapterContent').value = '';
+                showAppAlert("寫入成功", `章節已寫入資料庫！`, "✨");
+            }
+        }
+
+        function loadSystemSettingsToInputs() {
+            const s = state.systemSettings;
+            
+            // 載入數值
+            document.getElementById('setGasUrl').value = s.gasUrl || '';
+            document.getElementById('setEmailGasUrl').value = s.emailGasUrl || ''; 
+            document.getElementById('setWelcomeChannel').value = s.welcomeChannel || '#welcome-room';
+            document.getElementById('setWelcomeMsg').value = s.welcomeMsg || '';
+            document.getElementById('setFarewellChannel').value = s.farewellChannel || '#bye-bye';
+            document.getElementById('setFarewellMsg').value = s.farewellMsg || '';
+            document.getElementById('setSiteNoticeText').value = s.siteNoticeText || '';
+            document.getElementById('setSiteNoticeActive').value = s.siteNoticeActive || 'true';
+
+            // 實作限制：依照角色權限顯示或隱藏設定模組
+            const canEditFarewell = hasPermission('editFarewell');
+            const canEditWelcome = hasPermission('editWelcome');
+            const canEditNotice = hasPermission('editNotice');
+            const isReadingMaker = state.currentUser && state.currentUser.role === 'ReadingMaker';
+
+            // 1. 會員申請 Email API：只有可編輯 Farewell / 試算表的人能看見
+            document.getElementById('emailGasUrlBlock').classList.toggle('hidden', !canEditFarewell);
+            // 2. Google Sheets API：只有可編輯離別/雲端設定的人能看見
+            document.getElementById('dbGasUrlBlock').classList.toggle('hidden', !canEditFarewell);
+            // 3. 離別設定：只有可編輯離別/雲端設定的人能看見
+            document.getElementById('farewellConfigBlock').classList.toggle('hidden', !canEditFarewell);
+            
+            // 4. 歡迎設定：創辦者、高階管理員能看見
+            document.getElementById('welcomeConfigBlock').classList.toggle('hidden', !canEditWelcome);
+            
+            // 5. 公告設定：創辦者、高階、普通管理員能看見
+            document.getElementById('noticeConfigBlock').classList.toggle('hidden', !canEditNotice);
+            
+            // 6. 初始化本機按鈕：創辦者專用
+            document.getElementById('databaseResetBlock').classList.toggle('hidden', !isReadingMaker);
+        }
+
+        function saveSystemSettings() {
+            const s = state.systemSettings;
+            const newSettings = {
+                ...s,
+                emailGasUrl: hasPermission('editFarewell') ? document.getElementById('setEmailGasUrl').value.trim() : (s.emailGasUrl || ''),
+                gasUrl: hasPermission('editFarewell') ? document.getElementById('setGasUrl').value.trim() : (s.gasUrl || ''),
+                welcomeChannel: hasPermission('editWelcome') ? document.getElementById('setWelcomeChannel').value.trim() : (s.welcomeChannel || '#welcome-room'),
+                welcomeMsg: hasPermission('editWelcome') ? document.getElementById('setWelcomeMsg').value.trim() : (s.welcomeMsg || ''),
+                farewellChannel: hasPermission('editFarewell') ? document.getElementById('setFarewellChannel').value.trim() : (s.farewellChannel || '#bye-bye'),
+                farewellMsg: hasPermission('editFarewell') ? document.getElementById('setFarewellMsg').value.trim() : (s.farewellMsg || ''),
+                siteNoticeText: hasPermission('editNotice') ? document.getElementById('setSiteNoticeText').value.trim() : (s.siteNoticeText || ''),
+                siteNoticeActive: hasPermission('editNotice') ? document.getElementById('setSiteNoticeActive').value : (s.siteNoticeActive || 'true')
+            };
+
+            state.systemSettings = newSettings;
+            localStorage.setItem('novel_system_settings', JSON.stringify(state.systemSettings));
+            applyNoticeSetting(); 
+            runCloudApi("saveSettings", state.systemSettings);
+            showAppAlert("儲存成功", "您的所有客製化系統設定已成功同步！", "💾");
+        }
+
+        function applyNoticeSetting() {
+            const s = state.systemSettings;
+            if (s) {
+                document.getElementById('headerAnnouncement').innerText = s.siteNoticeText || "歡迎來到星河小說空間！";
+                if (s.siteNoticeActive === "true" && s.siteNoticeText) { document.getElementById('siteNoticeBar').classList.remove('hidden'); document.getElementById('siteNoticeText').innerText = s.siteNoticeText; } 
+                else { document.getElementById('siteNoticeBar').classList.add('hidden'); }
+            }
+        }
+
+        // ==================== I. 創辦者 (ReadingMaker) 專屬身分與權限管理邏輯 ====================
+        function getCustomRoles() {
+            try {
+                if (state.systemSettings.customRoles) {
+                    return JSON.parse(state.systemSettings.customRoles);
+                }
+            } catch(e) {
+                console.error("解析自訂身分失敗:", e);
+            }
+            return [];
+        }
+
+        function saveCustomRoles(roles) {
+            state.systemSettings.customRoles = JSON.stringify(roles);
+            localStorage.setItem('novel_system_settings', JSON.stringify(state.systemSettings));
+            rebuildRoleTranslationMap(roles);
+            runCloudApi("saveSettings", state.systemSettings);
+            updateUserRoleDropdowns();
+        }
+
+        function rebuildRoleTranslationMap(customRoles) {
+            roleTranslationMap = { ...baseRoleTranslationMap };
+            customRoles.forEach(r => {
+                roleTranslationMap[r.id] = r.name;
+            });
+        }
+
+        function getRoleOptionsHTML(selectedRole) {
+            let options = [
+                { key: "Reader", name: "讀者" },
+                { key: "Bluecat's Fans", name: "藍貓粉絲" },
+                { key: "Bucket's Fans", name: "水桶粉絲" },
+                { key: "Eason's Fans", name: "帥霖粉絲" },
+                { key: "WeiWei's Friends", name: "瑋瑋鄰居" },
+                { key: "Sus Guys", name: "八卦小孩" },
+                { key: "Admin", name: "管理員" },
+                { key: "Leader", name: "高階管理員" },
+                { key: "ReadingMaker", name: "創辦者" }
+            ];
+
+            const customRoles = getCustomRoles();
+            customRoles.forEach(r => {
+                options.push({ key: r.id, name: r.name });
+            });
+
+            return options.map(opt => {
+                const isSelected = (selectedRole === opt.key) ? 'selected' : '';
+                return `<option value="${opt.key}" ${isSelected}>${opt.name} (${opt.key})</option>`;
+            }).join('');
+        }
+
+        function updateUserRoleDropdowns() {
+            const selectNew = document.getElementById('adminNewUserRole');
+            if (selectNew) {
+                selectNew.innerHTML = getRoleOptionsHTML('Reader');
+            }
+        }
+
+        function renderCustomRolesList() {
+            const container = document.getElementById('customRolesListContainer');
+            if (!container) return;
+            container.innerHTML = '';
+            
+            const roles = getCustomRoles();
+            if (roles.length === 0) {
+                container.innerHTML = '<div class="text-[10px] text-slate-400">目前尚無自訂身分。</div>';
+                return;
+            }
+
+            roles.forEach(r => {
+                const div = document.createElement('div');
+                div.className = "flex items-center justify-between bg-slate-50 p-2 rounded-lg border border-slate-100 text-xs";
+                div.innerHTML = `
+                    <div>
+                        <span class="font-bold text-slate-800">${r.name}</span>
+                        <span class="text-[10px] text-slate-400">(${r.id})</span>
+                    </div>
+                    <div class="space-x-1">
+                        <button onclick="editCustomRole('${r.id}')" class="text-[10px] text-indigo-600 hover:underline">編輯</button>
+                        <button onclick="deleteCustomRole('${r.id}')" class="text-[10px] text-rose-600 hover:underline">刪除</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function createOrUpdateCustomRole() {
+            const id = document.getElementById('customRoleId').value.trim();
+            const name = document.getElementById('customRoleName').value.trim();
+            
+            if (!id || !name) {
+                showAppAlert("資訊不足", "請填寫自訂身分的英文代碼與顯示中文名稱！", "⚠️");
+                return;
+            }
+
+            const reserved = ["Reader", "Bluecat's Fans", "Bucket's Fans", "Eason's Fans", "WeiWei's Friends", "Sus Guys", "Admin", "Leader", "ReadingMaker", "reader", "admin"];
+            if (reserved.map(r => r.toLowerCase()).includes(id.toLowerCase())) {
+                showAppAlert("系統保留", "無法使用系統預設的身分代碼！", "❌");
+                return;
+            }
+
+            const permissions = {
+                accessAdmin: document.getElementById('perm_accessAdmin').checked,
+                editNotice: document.getElementById('perm_editNotice').checked,
+                editWelcome: document.getElementById('perm_editWelcome').checked,
+                editFarewell: document.getElementById('perm_editFarewell').checked,
+                deleteNovel: document.getElementById('perm_deleteNovel').checked
+            };
+
+            const maxChapters = parseInt(document.getElementById('customRoleMaxChapters').value);
+
+            let roles = getCustomRoles();
+            const idx = roles.findIndex(r => r.id.toLowerCase() === id.toLowerCase());
+            const newRole = { id, name, permissions, maxChapters };
+
+            if (idx !== -1) {
+                roles[idx] = newRole;
+            } else {
+                roles.push(newRole);
+            }
+
+            saveCustomRoles(roles);
+            renderCustomRolesList();
+
+            // 清空表單
+            document.getElementById('customRoleId').value = '';
+            document.getElementById('customRoleName').value = '';
+            document.getElementById('perm_accessAdmin').checked = false;
+            document.getElementById('perm_editNotice').checked = false;
+            document.getElementById('perm_editWelcome').checked = false;
+            document.getElementById('perm_editFarewell').checked = false;
+            document.getElementById('perm_deleteNovel').checked = false;
+            document.getElementById('customRoleMaxChapters').value = "4";
+
+            showAppAlert("自訂身分已儲存", `成功儲存自訂身分【${name}】並寫入雲端配置！`, "✅");
+        }
+
+        function editCustomRole(roleId) {
+            const roles = getCustomRoles();
+            const role = roles.find(r => r.id === roleId);
+            if (!role) return;
+
+            document.getElementById('customRoleId').value = role.id;
+            document.getElementById('customRoleName').value = role.name;
+            document.getElementById('perm_accessAdmin').checked = !!role.permissions.accessAdmin;
+            document.getElementById('perm_editNotice').checked = !!role.permissions.editNotice;
+            document.getElementById('perm_editWelcome').checked = !!role.permissions.editWelcome;
+            document.getElementById('perm_editFarewell').checked = !!role.permissions.editFarewell;
+            document.getElementById('perm_deleteNovel').checked = !!role.permissions.deleteNovel;
+            document.getElementById('customRoleMaxChapters').value = String(role.maxChapters || 4);
+        }
+
+        function deleteCustomRole(roleId) {
+            showAppConfirm("確認刪除", `您確定要刪除自訂身分【${roleTranslationMap[roleId]}】嗎？這將會使目前擁有該身分的讀者退回一般讀者權限！`, (confirmed) => {
+                if (confirmed) {
+                    let roles = getCustomRoles();
+                    roles = roles.filter(r => r.id !== roleId);
+                    saveCustomRoles(roles);
+                    renderCustomRolesList();
+                    showAppAlert("刪除成功", "該自訂身分已成功移除！", "🗑️");
+                }
+            });
+        }
+
+        async function loadAdminUsersList() {
+            const container = document.getElementById('adminUsersTableBody');
+            container.innerHTML = '<tr><td colspan="4" class="py-4 text-center text-slate-400">正在從雲端載入名單...</td></tr>';
+
+            let users = [];
+            if (state.systemSettings.gasUrl) {
+                const res = await runCloudApi("getUsers", {});
+                if (res && res.status === "success" && res.users) {
+                    users = res.users;
+                    localStorage.setItem('novel_users', JSON.stringify(users));
+                } else {
+                    users = JSON.parse(localStorage.getItem('novel_users')) || [];
+                }
+            } else {
+                users = JSON.parse(localStorage.getItem('novel_users')) || [];
+            }
+
+            container.innerHTML = '';
+            users.forEach((u, i) => {
+                const tr = document.createElement('tr');
+                tr.className = "border-b border-slate-100 hover:bg-slate-50 transition";
+                
+                const roleOptions = getRoleOptionsHTML(u.role);
+
+                tr.innerHTML = `
+                    <td class="py-3 px-2">
+                        <div class="font-bold text-slate-800">${u.nickname}</div>
+                        <div class="text-xs text-slate-400">${u.email}</div>
+                    </td>
+                    <td class="py-3 px-2">
+                        <span class="bg-indigo-50 text-indigo-700 text-xs font-bold px-2.5 py-1 rounded-full border border-indigo-100">
+                            ${roleTranslationMap[u.role] || u.role}
+                        </span>
+                    </td>
+                    <td class="py-3 px-2">
+                        <select id="userRoleSelect-${i}" class="p-1.5 border border-slate-200 rounded-lg text-xs">
+                            ${roleOptions}
+                        </select>
+                    </td>
+                    <td class="py-3 px-2">
+                        <button onclick="adminUpdateUser('${u.email}', ${i})" class="text-xs bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-3 py-1.5 rounded-lg transition">
+                            儲存身分
+                        </button>
+                    </td>
+                `;
+                container.appendChild(tr);
+            });
+        }
+
+        async function adminUpdateUser(email, index) {
+            const select = document.getElementById(`userRoleSelect-${index}`);
+            const newRole = select.value;
+
+            showAppConfirm("確認修改", `您確定要將該用戶的身分修改為【${roleTranslationMap[newRole]}】嗎？`, async (confirmed) => {
+                if (confirmed) {
+                    const localUsers = JSON.parse(localStorage.getItem('novel_users')) || [];
+                    const userIdx = localUsers.findIndex(u => u.email === email);
+                    if (userIdx !== -1) {
+                        localUsers[userIdx].role = newRole;
+                        localStorage.setItem('novel_users', JSON.stringify(localUsers));
+                    }
+
+                    if (state.systemSettings.gasUrl) {
+                        const res = await runCloudApi("updateUser", { email: email, role: newRole });
+                        if (res && res.status === "success") {
+                            showAppAlert("修改成功", "已成功更新雲端試算表的使用者身分！其網頁會在10秒內自動同步。", "✅");
+                        } else {
+                            showAppAlert("本機更新", "本機修改成功，但雲端同步失敗（請檢查 GAS 部署權限）。", "⚠️");
+                        }
+                    } else {
+                        showAppAlert("修改成功", "已成功更新本機使用者身分！", "✅");
+                    }
+                    loadAdminUsersList();
+                }
+            });
+        }
+
+        async function adminCreateUser() {
+            const email = document.getElementById('adminNewUserEmail').value.trim();
+            const password = document.getElementById('adminNewUserPass').value;
+            const nickname = document.getElementById('adminNewUserNickname').value.trim();
+            const role = document.getElementById('adminNewUserRole').value;
+
+            if (!email || !password || !nickname) {
+                showAppAlert("欄位未填", "請填寫新用戶的信箱、密碼與暱稱！", "⚠️");
+                return;
+            }
+
+            const newUser = { email, password, nickname, role };
+
+            const localUsers = JSON.parse(localStorage.getItem('novel_users')) || [];
+            if (localUsers.some(u => u.email === email)) {
+                showAppAlert("建立失敗", "此電子信箱已被註冊過囉！", "❌");
+                return;
+            }
+            localUsers.push(newUser);
+            localStorage.setItem('novel_users', JSON.stringify(localUsers));
+
+            if (state.systemSettings.gasUrl) {
+                const res = await runCloudApi("addUser", newUser);
+                if (res && res.status === "success") {
+                    showAppAlert("建立成功", `新使用者【${nickname}】已成功同步至雲端試算表！`, "✅");
+                } else {
+                    showAppAlert("本機建立成功", "已於本機建立帳號，但同步雲端失敗。", "⚠️");
+                }
+            } else {
+                showAppAlert("建立成功", `新使用者【${nickname}】已成功建立！`, "✅");
+            }
+
+            document.getElementById('adminNewUserEmail').value = '';
+            document.getElementById('adminNewUserPass').value = '';
+            document.getElementById('adminNewUserNickname').value = '';
+            
+            loadAdminUsersList();
+        }
+
+        function startRealtimeRoleSync() {
+            setInterval(async () => {
+                if (state.currentUser && state.systemSettings.gasUrl) {
+                    try {
+                        const res = await runCloudApi("getUserRole", { email: state.currentUser.email });
+                        if (res && res.status === "success") {
+                            const oldRole = state.currentUser.role;
+                            const oldNickname = state.currentUser.nickname;
+                            
+                            if (res.role !== oldRole || res.nickname !== oldNickname) {
+                                state.currentUser.role = res.role;
+                                state.currentUser.nickname = res.nickname;
+                                sessionStorage.setItem('novel_active_user', JSON.stringify(state.currentUser));
+                                updateUserUI();
+                                
+                                const friendlyRole = roleTranslationMap[res.role] || res.role;
+                                showToast("📢 身分/暱稱同步", `系統管理員已將您的暱稱更新為「${res.nickname}」，身分更新為「${friendlyRole}」！`, "✨");
+                                
+                                // 安全機制：如果不具管理權限卻在後台頁面，強制踢出回到前台
+                                const hasAdminAccess = hasPermission('accessAdmin');
+                                if (!hasAdminAccess && state.activePage === 'admin') {
+                                    navigateTo('home');
+                                    showAppAlert("權限調整", "由於您的管理權限已被系統調動，已自動為您關閉後台視窗！", "⚠️");
+                                }
+                            }
+                        }
+                    } catch (e) {
+                        console.error("雲端身分同步失敗:", e);
+                    }
+                }
+            }, 10000); // 10秒輪詢一次
+        }
+
+        window.onload = function() { 
+            initDatabase(); 
+            rebuildRoleTranslationMap(getCustomRoles());
+            updateUserUI(); 
+            renderHomeNovels(); 
+            applyNoticeSetting(); 
+            syncFromCloud(); 
+            startRealtimeRoleSync();
+        };
+    </script>
+</body>
+</html>
