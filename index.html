@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📚 星河小說創作與管理系統</title>
+    <title>📚 510小說網站創作與管理系統</title>
     <!-- 引入 Tailwind CSS 提供極致精美視覺 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -38,7 +38,7 @@
             <!-- Logo -->
             <div class="flex items-center space-x-2 cursor-pointer" onclick="navigateTo('home')">
                 <span class="text-2xl">📚</span>
-                <span class="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">星河小說空間</span>
+                <span class="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">510小說網</span>
             </div>
 
             <!-- 右側導覽資訊與控制項 -->
@@ -93,7 +93,7 @@
                 <div class="relative z-10 max-w-2xl space-y-4">
                     <span class="bg-indigo-500/30 text-indigo-300 text-xs font-bold px-3 py-1 rounded-full border border-indigo-400/30">精品原創小說平台</span>
                     <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">探索專屬於你的文字世界</h1>
-                    <p class="text-indigo-100 text-sm md:text-base">在這裡，每一部小說都是一場奇幻的冒險。歡迎來到星河小說空間，登入後即可享有個人化書籤與進度紀錄。</p>
+                    <p class="text-indigo-100 text-sm md:text-base">在這裡，每一部小說都是一場奇幻的冒險。歡迎來到510小說網，登入後即可享有個人化書籤與進度紀錄。</p>
                     <div class="flex space-x-3">
                         <button onclick="scrollToNovels()" class="bg-white text-indigo-900 hover:bg-slate-100 font-semibold text-sm px-5 py-2.5 rounded-xl shadow-md transition">立即閱讀</button>
                         <!-- 點擊加入會員，檢查登入並開啟專屬申請表 -->
@@ -727,7 +727,7 @@
 
         const defaultSystemSettings = {
             welcomeChannel: "#welcome-room",
-            welcomeMsg: "🎉 歡迎 {user} 加入星河小說空間！願我們在書香與文字的世界裡找到共鳴。",
+            welcomeMsg: "🎉 歡迎 {user} 加入510小說網！願我們在書香與文字的世界裡找到共鳴。",
             farewellChannel: "#bye-bye",
             farewellMsg: "👋 {user} 暫時離開了我們，沒關係！我們會在這裡靜靜等候你的下一次造訪。",
             siteNoticeText: "🔥 限時福利：所有人免費會員3分鐘!!!",
@@ -1014,7 +1014,7 @@
                     state.currentUser = foundUser;
                     sessionStorage.setItem('novel_active_user', JSON.stringify(foundUser));
                     updateUserUI(); renderHomeNovels(); closeLoginModal();
-                    showToast("📢 系統登入", `${foundUser.nickname}，歡迎回到星河小說空間！`, "🎉");
+                    showToast("📢 系統登入", `${foundUser.nickname}，歡迎回到510小說網！`, "🎉");
                 } else {
                     showAppAlert("登入失敗", "帳號或密碼有誤！(若雲端已註冊，請確保後台 API 網址已綁定正確)", "❌");
                 }
@@ -1547,7 +1547,7 @@
         function applyNoticeSetting() {
             const s = state.systemSettings;
             if (s) {
-                document.getElementById('headerAnnouncement').innerText = s.siteNoticeText || "歡迎來到星河小說空間！";
+                document.getElementById('headerAnnouncement').innerText = s.siteNoticeText || "歡迎來到510小說網！";
                 if (s.siteNoticeActive === "true" && s.siteNoticeText) { document.getElementById('siteNoticeBar').classList.remove('hidden'); document.getElementById('siteNoticeText').innerText = s.siteNoticeText; } 
                 else { document.getElementById('siteNoticeBar').classList.add('hidden'); }
             }
