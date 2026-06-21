@@ -719,7 +719,7 @@
                     {
                         id: "chap-fy-1",
                         title: "第一章：破落少年與鏽劍",
-                        content: "清晨的落葉城下著淅淅瀝瀝的小雨。\n\n林楓抱著那一柄從柴房角落撿來的無名鏽劍，呆呆地坐在台階上。三天前，林家在落葉城一夜之間被仇家所滅，只有他這個被視為修煉廢柴的庶子僥倖從狗洞逃生。\n\n「仙魔兩立，實力為尊...」林楓看著自己雙手因為磨擦而起的血泡，一雙黑眸閃爍著冰冷儲定、堅定的光芒。\n\n林楓猛然拔出鏽劍，劍身斑駁不堪，甚至連一絲靈力波動都感受不到。然而，當雨水滴落在劍尖的刹那，林楓的心海之中忽然傳來一聲遠古巨獸般的低吟。\n\n『小傢伙，你想要報仇嗎？』一個蒼老而霸道無邊的聲音，自劍身深處轟然響徹他的識海！"
+                        content: "清晨的落葉城下著淅淅瀝瀝的小雨。\n\n林楓抱著那一柄從柴房角落撿來的無名鏽劍，呆呆地坐在台階上。三天前，林家在落葉城一夜之間被仇家所滅，只有他這個被視為修煉廢柴的庶子僥倖從狗洞逃生。\n\n「仙魔兩立，實力為尊...」林楓看著自己雙手因為磨擦而起的血泡，一雙黑眸閃爍著冰冷堅定的光芒。\n\n林楓猛然拔出鏽劍，劍身斑駁不堪，甚至連一絲靈力波動都感受不到。然而，當雨水滴落在劍尖的刹那，林楓的心海之中忽然傳來一聲遠古巨獸般的低吟。\n\n『小傢伙，你想要報仇嗎？』一個蒼老而霸道無邊的聲音，自劍身深處轟然響徹他的識海！"
                     }
                 ]
             }
@@ -777,8 +777,8 @@
                 });
                 const text = await response.text();
                 const result = JSON.parse(text);
-                document.getElementById('cloudSyncStatus').classList.add('hidden'); // 修正：.add 改成 classList.add
-                document.getElementById('cloudSyncStatus').classList.remove('flex'); // 修正：.remove 改成 classList.remove
+                document.getElementById('cloudSyncStatus').classList.add('hidden');
+                document.getElementById('cloudSyncStatus').classList.remove('flex');
                 return result;
             } catch (error) {
                 console.error("雲端同步失敗: ", error);
@@ -802,9 +802,11 @@
                 }
                 const resSettings = await runCloudApi("getSettings", {});
                 if (resSettings && resSettings.status === "success" && resSettings.settings) {
-                    // 🛡️ 防罷工核心：強制保留您正確的預設 Email API 網址，絕對不被空資料覆蓋
+                    // 🛡️ 防罷工核心：強制保留正確的 Database API 與 Email API 網址，絕對不被空資料覆蓋
                     const savedEmailUrl = resSettings.settings.emailGasUrl || state.systemSettings.emailGasUrl || defaultSystemSettings.emailGasUrl;
-                    state.systemSettings = { ...state.systemSettings, ...resSettings.settings, emailGasUrl: savedEmailUrl };
+                    const savedGasUrl = resSettings.settings.gasUrl || state.systemSettings.gasUrl || defaultSystemSettings.gasUrl;
+
+                    state.systemSettings = { ...state.systemSettings, ...resSettings.settings, emailGasUrl: savedEmailUrl, gasUrl: savedGasUrl };
                     localStorage.setItem('novel_system_settings', JSON.stringify(state.systemSettings));
                     applyNoticeSetting();
                 }
@@ -903,6 +905,11 @@
             else if (pageId === 'admin') {
                 renderAdminNovelsTable();
                 updateChapterSelectDropdown();
+                
+                // 動態隱藏或顯示「小說新增模組」與「章節編排標籤」
+                const canEditNovel = hasPermission('editNovel');
+                document.getElementById('createNovelBlock').classList.toggle('hidden', !canEditNovel);
+                document.getElementById('tabBtn-chapters').classList.toggle('hidden', !canEditNovel);
             }
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -987,11 +994,15 @@
                         foundUser = { email: "admin@gmail.com", nickname: "最高管理員", role: "Admin" };
                         runCloudApi("register", { email: "admin@gmail.com", password: "123456", role: "Admin", nickname: "最高管理員" });
                     } else {
-                        showAppAlert("登入失敗", res ? res.message : "雲端資料庫連線超時，請確認 GAS 網頁權限為「任何人」！", "❌");
+                        showAppAlert("登入失敗", (res ? res.message : "無法連線至雲端資料庫。") + "\n\n(若您剛上架至 GitHub，請先以 admin@gmail.com / 123456 登入，至後台綁定最新的 Database API 網址！)", "❌");
                         return;
                     }
                 } else {
-                    if (localAdmin) foundUser = localAdmin;
+                    if (localAdmin) {
+                        foundUser = localAdmin;
+                    } else if (email === "admin@gmail.com" && String(pass) === "123456") {
+                        foundUser = { email: "admin@gmail.com", nickname: "最高管理員", role: "Admin" };
+                    }
                 }
 
                 if (foundUser) {
@@ -1000,7 +1011,7 @@
                     updateUserUI(); renderHomeNovels(); closeLoginModal();
                     showToast("📢 系統登入", `${foundUser.nickname}，歡迎回到星河小說空間！`, "🎉");
                 } else {
-                    showAppAlert("登入失敗", "帳號或密碼有誤！提示：admin@gmail.com / 123456", "❌");
+                    showAppAlert("登入失敗", "帳號或密碼有誤！(若雲端已註冊，請確保後台 API 網址已綁定正確)", "❌");
                 }
             } else {
                 if (!nickname) { showAppAlert("資訊不足", "註冊必須填寫您的暱稱！", "⚠️"); return; }
