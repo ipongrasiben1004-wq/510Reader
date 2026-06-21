@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📚 星河小說創作與管理系統</title>
+    <title>📚 星河小說空間</title>
     <!-- 引入 Tailwind CSS 提供極致精美視覺 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -213,7 +213,8 @@
 
             <!-- A. 小說管理分頁 -->
             <div id="adminTab-novels" class="space-y-6">
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-4">
+                <!-- 建立新小說面板（動態隔離：非 Writing/Editing 權限不顯示） -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-4" id="createNovelBlock">
                     <h3 class="text-lg font-bold text-slate-800">✨ 建立新小說</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
@@ -440,6 +441,10 @@
                                     <label class="flex items-center space-x-2 cursor-pointer">
                                         <input type="checkbox" id="perm_accessAdmin" class="rounded text-indigo-600 focus:ring-indigo-500">
                                         <span>進入後台管理權限</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 cursor-pointer">
+                                        <input type="checkbox" id="perm_editNovel" class="rounded text-indigo-600 focus:ring-indigo-500">
+                                        <span>新增/編輯小說與章節權限</span>
                                     </label>
                                     <label class="flex items-center space-x-2 cursor-pointer">
                                         <input type="checkbox" id="perm_editNotice" class="rounded text-indigo-600 focus:ring-indigo-500">
@@ -700,7 +705,7 @@
                     {
                         id: "chap-510-4",
                         title: "第四章：外套風波與這就是510！",
-                        content: "起身後，旁邊的宋家和眼神突然瞄到教室中央。曹棋棋跟葉筳榆正靠在一起聊天（耍gay 內心:沒事）。宋家和立刻撥了撥瀏海，開啟「耍帥模式」大步走過去。\n\n宋家和（直接湊到曹棋棋邊，故意壓低聲音）：\n「棋棋姐姐，借我課本……」\n\n話還沒說完，宋家和居然直接伸手拿起曹棋棋掛在椅子上的外套，當著大家的面直接穿了上去！\n\n周圍的男生瞬間爆出雷鳴般的起鬨聲：\n「喔————！！又來了！宋家和又在穿她外套了ㄟ！帥喔!（誤）」\n\n曹棋棋（站在旁邊，滿臉無語）：\n「宋家和！！！你不要又穿我外套好不好，我都洗過很多件了……」\n\n許晞本（在旁邊三八步，再度露出怪北北的表情）：\n「宋家和，你好像把她穿過的都穿了，而且她說這件好像是她姊的QQ。」\n\n葉筳榆（也跟著曹棋棋一起翻白眼，無奈地說）：\n「宋家和，全班都知道你喜歡她啦！但你真的很噁欸，上次體育課喝她水壺，她還沒管你欸！」\n\n宋家和完全沒有要理葉筳榆的意思，當作沒聽到，自顧自的跑去找其他男生聊天了。\n\n\n【尾聲：這就是510！】\n\n午後金黃色的夕陽斜斜地照進新北市中和區復興國小五年10班的窗戶。\n\n這就是屬於這群朋友們最真實、最精彩的日常——有連勝和落敗的電競恩怨、有怪北北的關心眼神、有不小心在黑板上留下的記號、有五分鐘神速吃完的午餐，還有那個全班皆知、每天樂此不疲的外套大八卦。\n\n（全劇終）"
+                        content: "起身後，旁邊的宋家和眼神突然瞄到教室中央。曹棋棋跟葉筳榆正靠在一起聊天（耍gay 內心:沒事）。宋家和立刻撥了撥瀏海，開啟「耍帥模式」大步走過去。\n\n宋家和（直接湊到曹棋棋邊，故意壓低聲音）：\n「棋棋姐姐，借我課本……」\n\n話還沒說完，宋家和居然直接伸手拿起曹棋棋掛在椅子上的外套，當著大家的面直接穿了上去！\n\n周圍的男生瞬間爆出雷鳴般的起鬨聲：\n「喔————！！又來了！宋家和又在穿她外套了ㄟ！帥喔!（誤）」\n\n曹棋棋（站在旁邊，滿臉無語）：\n「宋家和！！！你不要又穿我外套好不好，我都洗過很多件了……」\n\n許晞本（在旁邊三八步，再度露出怪北北的表情）：\n「宋家和，你好像把她穿過的都穿了，而且她說這件好像是她姊的QQ。」\n\n葉筳榆（也跟著曹棋棋一起翻白眼，無奈地說）：\n「宋家和，全班都知道你喜歡她啦！但你真的很噁欸，上次你體育課喝她水壺，她還沒管你欸！」\n\n宋家和完全沒有要理葉筳榆的意思，當作沒聽到，自顧自的跑去找其他男生聊天了。\n\n\n【尾聲：這就是510！】\n\n午後金黃色的夕陽斜斜地照進新北市中和區復興國小五年10班的窗戶。\n\n這就是屬於這群朋友們最真實、最精彩的日常——有連勝和落敗的電競恩怨、有怪北北的關心眼神、有不小心在黑板上留下的記號、有五分鐘神速吃完的午餐，還有那個全班皆知、每天樂此不疲的外套大八卦。\n\n（全劇終）"
                     }
                 ]
             },
@@ -727,8 +732,9 @@
             farewellMsg: "👋 {user} 暫時離開了我們，沒關係！我們會在這裡靜靜等候你的下一次造訪。",
             siteNoticeText: "🔥 限時福利：所有人免費會員3分鐘!!!",
             siteNoticeActive: "true",
-            gasUrl: "https://script.google.com/macros/s/AKfycbyrkP1ae51oAIshv0P7TbjtW6XUtM0WTflkdRzPx7IRxv1Xoe5lE2sLy8P6pSfL1j8tOw/exec",
-            emailGasUrl: ""
+            // 🛡️ 超重要對接：將資料庫 API 與 發信 API 正確對齊歸位，徹底消除狂寄信與連線失敗
+            gasUrl: "https://script.google.com/macros/s/AKfycbx4ww4a0U64IBIGAzcjFKegk5TP6CiBOKJKOP3XdA744-7Z83c2cPKoaXIsQLnz9zpY/exec",
+            emailGasUrl: "https://script.google.com/macros/s/AKfycbyrkP1ae51oAIshv0P7TbjtW6XUtM0WTflkdRzPx7IRxv1Xoe5lE2sLy8P6pSfL1j8tOw/exec"
         };
 
         let state = {
@@ -742,7 +748,7 @@
             authTab: 'login'
         };
 
-        // 基礎身分中文化翻譯對照表（用於與 GAS 雲端資料庫雙向對齊轉譯）
+        // 基礎身分中文化翻譯對照表（僅此處宣告一次，完美修復重複宣告語法錯誤）
         const baseRoleTranslationMap = {
             "Reader": "讀者",
             "reader": "讀者",
@@ -756,7 +762,6 @@
             "Leader": "高階管理員",
             "ReadingMaker": "創辦者"
         };
-        // 宣告為全域變數，避免重複宣告
         let roleTranslationMap = { ...baseRoleTranslationMap };
 
         // 核心 API 請求函數
@@ -1373,6 +1378,7 @@
             // 高階管理員預設權限
             if (role === 'Leader') {
                 if (action === 'accessAdmin') return true;
+                if (action === 'editNovel') return true; // 新增/編輯章節與小說權限
                 if (action === 'editNotice') return true;
                 if (action === 'editWelcome') return true;
                 if (action === 'maxChapters') return 12;
@@ -1382,6 +1388,7 @@
             // 管理員預設權限
             if (role === 'Admin' || role === 'admin') {
                 if (action === 'accessAdmin') return true;
+                if (action === 'editNovel') return true; // 新增/編輯章節與小說權限
                 if (action === 'editNotice') return true;
                 if (action === 'maxChapters') return 4;
                 return false;
@@ -1429,7 +1436,7 @@
 
         function createNewNovel() {
             const title = document.getElementById('newNovelTitle').value.trim(); const author = document.getElementById('newNovelAuthor').value.trim();
-            if (!title || !author) { showAppAlert("欄位遺漏", "小說名稱與作者名字為必填項目！", "⚠️"); return; }
+            if (!title || !author) { showAppAlert("欄位遺漏", "小說名稱與作者名字為必填！", "⚠️"); return; }
             state.novels.push({ id: `novel-${Date.now()}`, title, author, cover: document.getElementById('newNovelCover').value.trim() || '📖', description: document.getElementById('newNovelDesc').value.trim() || "目前暫無簡介說明。", chapters: [] });
             saveNovelsToStorage(); renderAdminNovelsTable(); updateChapterSelectDropdown();
             document.getElementById('newNovelTitle').value = ''; document.getElementById('newNovelAuthor').value = ''; document.getElementById('newNovelCover').value = ''; document.getElementById('newNovelDesc').value = '';
@@ -1636,6 +1643,7 @@
 
             const permissions = {
                 accessAdmin: document.getElementById('perm_accessAdmin').checked,
+                editNovel: document.getElementById('perm_editNovel').checked,
                 editNotice: document.getElementById('perm_editNotice').checked,
                 editWelcome: document.getElementById('perm_editWelcome').checked,
                 editFarewell: document.getElementById('perm_editFarewell').checked,
@@ -1661,6 +1669,7 @@
             document.getElementById('customRoleId').value = '';
             document.getElementById('customRoleName').value = '';
             document.getElementById('perm_accessAdmin').checked = false;
+            document.getElementById('perm_editNovel').checked = false;
             document.getElementById('perm_editNotice').checked = false;
             document.getElementById('perm_editWelcome').checked = false;
             document.getElementById('perm_editFarewell').checked = false;
@@ -1678,6 +1687,7 @@
             document.getElementById('customRoleId').value = role.id;
             document.getElementById('customRoleName').value = role.name;
             document.getElementById('perm_accessAdmin').checked = !!role.permissions.accessAdmin;
+            document.getElementById('perm_editNovel').checked = !!role.permissions.editNovel;
             document.getElementById('perm_editNotice').checked = !!role.permissions.editNotice;
             document.getElementById('perm_editWelcome').checked = !!role.permissions.editWelcome;
             document.getElementById('perm_editFarewell').checked = !!role.permissions.editFarewell;
