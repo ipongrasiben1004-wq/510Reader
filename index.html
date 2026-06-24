@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
+    <!-- STREAMING_CHUNK: Setting up HTML meta and Tailwind configuration -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>📚 510小說網</title>
@@ -70,6 +71,7 @@
                     <div id="userInfoArea" class="hidden flex items-center space-x-3">
                         <span id="userNickname" class="text-sm font-semibold text-slate-700">讀者</span>
                         <span id="userRoleBadge" class="bg-indigo-100 text-indigo-800 text-[10px] font-bold px-2 py-0.5 rounded-full">讀者</span>
+                        
                         <!-- 👤 全體會員專屬：偏好設定按鈕 -->
                         <button onclick="openPersonalSettingsModal()" class="text-slate-500 hover:text-indigo-600 transition p-1.5 rounded-xl hover:bg-slate-100" title="👤 個人設定">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -103,6 +105,7 @@
                     <p class="text-indigo-100 text-sm md:text-base">在這裡，每一部小說都是一場奇幻的冒險。歡迎來到510小說網，登入後即可享有個人化書籤與進度紀錄。</p>
                     <div class="flex space-x-3">
                         <button onclick="scrollToNovels()" class="bg-white text-indigo-900 hover:bg-slate-100 font-semibold text-sm px-5 py-2.5 rounded-xl shadow-md transition">立即閱讀</button>
+                        <!-- 點擊加入會員，檢查登入並開啟專屬申請表 -->
                         <button onclick="handleJoinMembershipBtn()" class="bg-indigo-600/50 hover:bg-indigo-600/80 border border-indigo-400/30 font-semibold text-sm px-5 py-2.5 rounded-xl transition">加入會員</button>
                     </div>
                 </div>
@@ -111,23 +114,25 @@
                 </div>
             </div>
 
-            <!-- 小說展示區 -->
+            <!-- 小說展示區 (一整排小說滑動橫幅) -->
             <div id="novelsSection" class="space-y-4">
                 <div class="flex items-center justify-between">
                     <h2 class="text-xl font-bold text-slate-800 flex items-center space-x-2">
                         <span>🔥</span> <span>精選連載書架</span>
                     </h2>
+                    <!-- 左右滑動按鈕 -->
                     <div class="flex items-center space-x-2">
                         <button onclick="scrollShelf('left')" class="p-2 bg-white hover:bg-slate-100 text-slate-600 rounded-full shadow-sm border border-slate-200 transition">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>
                         </button>
                         <button onclick="scrollShelf('right')" class="p-2 bg-white hover:bg-slate-100 text-slate-600 rounded-full shadow-sm border border-slate-200 transition">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></svg>
                         </button>
                         <div class="text-xs text-slate-500 pl-2">共 <span id="novelCount">0</span> 本</div>
                     </div>
                 </div>
 
+                <!-- 橫向滑動容器 -->
                 <div class="relative">
                     <div id="novelShelf" class="flex overflow-x-auto gap-6 pb-4 pt-1 px-1 no-scrollbar snap-x snap-mandatory scroll-smooth">
                         <!-- 小說卡片由 JS 動態生成 -->
@@ -148,6 +153,7 @@
 
         <!-- ==================== 頁面 2：小說閱讀器 (Reader) ==================== -->
         <section id="page-reader" class="hidden max-w-4xl mx-auto space-y-4">
+            <!-- 返回與設定工具列 -->
             <div class="flex items-center justify-between bg-white px-4 py-3 rounded-xl shadow-sm border border-slate-100">
                 <button onclick="navigateTo('home')" class="text-slate-600 hover:text-indigo-600 text-sm font-semibold flex items-center space-x-1">
                     <span>←</span> <span>返回大廳</span>
@@ -156,8 +162,8 @@
                     <button onclick="changeFontSize(-2)" class="p-1 px-2 hover:bg-slate-100 rounded text-sm font-bold">A-</button>
                     <button onclick="changeFontSize(2)" class="p-1 px-2 hover:bg-slate-100 rounded text-sm font-bold">A+</button>
                     <div class="h-4 w-px bg-slate-200 mx-2"></div>
+                    <!-- 背景主題色切換 -->
                     <div class="flex space-x-1" id="readerBgGroup">
-                        <!-- 背景主題色切換 -->
                         <button onclick="setTheme('light')" class="w-6 h-6 rounded-full border border-slate-300 bg-white" title="明亮白"></button>
                         <button onclick="setTheme('eyecare')" class="w-6 h-6 rounded-full border border-amber-300 bg-eyecare" title="護眼綠"></button>
                         <button onclick="setTheme('sepia')" class="w-6 h-6 rounded-full border border-orange-300 bg-orange-100" title="復古黃"></button>
@@ -173,12 +179,13 @@
                         <h1 class="text-2xl md:text-3xl font-bold text-slate-800" id="readerChapterTitle">讀取中...</h1>
                     </div>
 
-                    <!-- 章節內容 -->
+                    <!-- 章節文字 -->
                     <article id="readerContent" class="text-lg leading-relaxed text-slate-700 whitespace-pre-wrap min-h-[300px] font-serif">
                         正在取得章節內容，請稍候...
                     </article>
                 </div>
 
+                <!-- 閱讀器底部翻頁 -->
                 <div class="border-t border-slate-200/60 pt-6 mt-8 flex justify-between items-center">
                     <button id="prevChapterBtn" onclick="prevChapter()" class="px-4 py-2 border border-slate-200 hover:bg-slate-50 text-sm font-semibold rounded-xl transition">
                         上一章
@@ -264,7 +271,7 @@
 
             <!-- 小說管理分頁 -->
             <div id="adminTab-novels" class="space-y-6">
-                <!-- 建立新小說面板 -->
+                <!-- 建立新小說面板（動態隔離） -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-4" id="createNovelBlock">
                     <h3 class="text-lg font-bold text-slate-800">✨ 建立新小說</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -569,12 +576,195 @@
             
             <!-- Right Panel Content -->
             <div class="flex-grow p-6 md:p-8 flex flex-col justify-between overflow-y-auto no-scrollbar bg-white">
-                <div id="settingsContent" class="space-y-6">
-                    <!-- JS 動態生成 -->
+                <div class="space-y-6 flex-grow">
+                    <!-- Tab Content: Account -->
+                    <div id="setPanel-account" class="space-y-6">
+                        <h4 class="text-base font-bold text-slate-800 border-l-4 border-indigo-500 pl-2">帳號與安全</h4>
+                        <div class="space-y-4 bg-slate-50 p-5 rounded-2xl border border-slate-100 text-sm">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 pb-3 border-b border-slate-200/50">
+                                <div>
+                                    <span class="text-slate-400 text-xs block">目前帳號 (Email)</span>
+                                    <span id="display-email" class="font-bold text-slate-700 text-sm">載入中...</span>
+                                </div>
+                                <button onclick="toggleSettingForm('email')" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-bold text-xs px-3 py-2 rounded-xl transition self-start md:self-auto">變更帳號</button>
+                            </div>
+                            <div id="form-email" class="hidden p-4 bg-white rounded-xl border border-slate-200/60 space-y-3">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-500 mb-1">新電子信箱</label>
+                                    <input id="setNewEmail" type="email" placeholder="example@gmail.com" class="w-full p-2.5 border rounded-xl text-xs focus:ring-2 focus:ring-indigo-500">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-500 mb-1">請輸入目前密碼進行驗證</label>
+                                    <input id="setEmailVerifyPass" type="password" placeholder="請輸入原密碼" class="w-full p-2.5 border rounded-xl text-xs focus:ring-2 focus:ring-indigo-500">
+                                </div>
+                                <button onclick="submitChangeEmail()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-4 py-2 rounded-lg transition">確認變更</button>
+                            </div>
+                            
+                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 pb-3 border-b border-slate-200/50">
+                                <div>
+                                    <span class="text-slate-400 text-xs block">目前密碼</span>
+                                    <span id="display-password" class="font-mono text-lg text-slate-700 font-bold tracking-widest">••••••••</span>
+                                </div>
+                                <button onclick="toggleSettingForm('password')" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-bold text-xs px-3 py-2 rounded-xl transition self-start md:self-auto">變更密碼</button>
+                            </div>
+                            <div id="form-password" class="hidden p-4 bg-white rounded-xl border border-slate-200/60 space-y-3">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-500 mb-1">原密碼</label>
+                                    <input id="setOldPass" type="password" placeholder="請輸入目前的舊密碼" class="w-full p-2.5 border rounded-xl text-xs focus:ring-2 focus:ring-indigo-500">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-500 mb-1">新密碼</label>
+                                    <input id="setNewPass" type="password" placeholder="請輸入新密碼" class="w-full p-2.5 border rounded-xl text-xs focus:ring-2 focus:ring-indigo-500">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-500 mb-1">確認新密碼</label>
+                                    <input id="setConfirmNewPass" type="password" placeholder="請再次輸入新密碼進行確認" class="w-full p-2.5 border rounded-xl text-xs focus:ring-2 focus:ring-indigo-500">
+                                </div>
+                                <button onclick="submitChangePassword()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-4 py-2 rounded-lg transition">確認變更</button>
+                            </div>
+
+                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
+                                <div>
+                                    <span class="text-slate-400 text-xs block">目前顯示暱稱</span>
+                                    <span id="display-nickname" class="font-bold text-slate-700 text-sm">載入中...</span>
+                                </div>
+                                <button onclick="toggleSettingForm('nickname')" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-bold text-xs px-3 py-2 rounded-xl transition self-start md:self-auto">變更暱稱</button>
+                            </div>
+                            <div id="form-nickname" class="hidden p-4 bg-white rounded-xl border border-slate-200/60 space-y-3">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-500 mb-1">新顯示暱稱</label>
+                                    <input id="setNewNickname" type="text" placeholder="請輸入新暱稱" class="w-full p-2.5 border rounded-xl text-xs focus:ring-2 focus:ring-indigo-500">
+                                </div>
+                                <button onclick="submitChangeNickname()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-4 py-2 rounded-lg transition">確認變更</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab Content: Preferences -->
+                    <div id="setPanel-preferences" class="space-y-6 hidden">
+                        <h4 class="text-base font-bold text-slate-800 border-l-4 border-indigo-500 pl-2">隱私權與呈現設定</h4>
+                        <div class="space-y-4 bg-slate-50 p-5 rounded-2xl border border-slate-100 text-sm">
+                            <label class="flex items-center justify-between cursor-pointer py-1">
+                                <div>
+                                    <span class="font-bold text-slate-700 block">讓別人看見你的到來 (歡迎與離別通知)</span>
+                                    <span class="text-xs text-slate-400 block mt-0.5">開啟後，您的登入與登出事件將會觸發全站通知</span>
+                                </div>
+                                <input type="checkbox" id="prefArrival" class="rounded text-indigo-600 focus:ring-indigo-500 w-5 h-5 cursor-pointer" onchange="savePrefSetting('arrival', this.checked)">
+                            </label>
+                            <hr class="border-slate-200/60">
+                            
+                            <label class="flex items-center justify-between cursor-pointer py-1">
+                                <div>
+                                    <span class="font-bold text-slate-700 block">讓別人看見你的留言</span>
+                                    <span class="text-xs text-slate-400 block mt-0.5">關閉後，您的新增評論將以匿名身分顯示</span>
+                                </div>
+                                <input type="checkbox" id="prefComments" class="rounded text-indigo-600 focus:ring-indigo-500 w-5 h-5 cursor-pointer" onchange="savePrefSetting('comments', this.checked)">
+                            </label>
+                            <hr class="border-slate-200/60">
+                            
+                            <label class="flex items-center justify-between cursor-pointer py-1">
+                                <div>
+                                    <span class="font-bold text-slate-700 block">讓別人看見你的暱稱</span>
+                                    <span class="text-xs text-slate-400 block mt-0.5">關閉後，他人看見您的評論或通知時皆顯示為匿名</span>
+                                </div>
+                                <input type="checkbox" id="prefNickname" class="rounded text-indigo-600 focus:ring-indigo-500 w-5 h-5 cursor-pointer" onchange="savePrefSetting('nickname', this.checked)">
+                            </label>
+                            <hr class="border-slate-200/60">
+                            
+                            <label class="flex items-center justify-between cursor-pointer py-1">
+                                <div>
+                                    <span class="font-bold text-slate-700 block">讓別人看見你的職位</span>
+                                    <span class="text-xs text-slate-400 block mt-0.5">關閉後，您的評論下方將不顯示特殊身分徽章</span>
+                                </div>
+                                <input type="checkbox" id="prefRole" class="rounded text-indigo-600 focus:ring-indigo-500 w-5 h-5 cursor-pointer" onchange="savePrefSetting('role', this.checked)">
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Tab Content: Reading -->
+                    <div id="setPanel-reading" class="space-y-6 hidden">
+                        <h4 class="text-base font-bold text-slate-800 border-l-4 border-indigo-500 pl-2">個人化閱讀器偏好</h4>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 bg-slate-50 p-5 rounded-2xl border border-slate-100 text-sm">
+                            <div class="space-y-5">
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1">字體大小等級 (1 ~ 10)</label>
+                                    <span class="text-xs text-slate-400 block mb-2">微調出最符合您視力健康與舒適度的閱讀字級</span>
+                                    <div class="flex items-center space-x-3">
+                                        <input type="range" id="prefFontSizeSlider" min="1" max="10" class="flex-grow accent-indigo-600 cursor-pointer" oninput="updateFontSizePreview(this.value)">
+                                        <span id="fontSizeLvlLabel" class="font-bold text-indigo-600 text-lg w-6 text-center">4</span>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-2">閱讀器背景顏色主題</label>
+                                    <div class="flex space-x-3 items-center" id="themeButtons">
+                                        <button onclick="updatePrefBgTheme('light')" class="w-8 h-8 rounded-full border-2 bg-white" title="明亮白" id="btn-theme-light"></button>
+                                        <button onclick="updatePrefBgTheme('eyecare')" class="w-8 h-8 rounded-full border-2 bg-[#f4ecd8]" title="護眼綠" id="btn-theme-eyecare"></button>
+                                        <button onclick="updatePrefBgTheme('sepia')" class="w-8 h-8 rounded-full border-2 bg-[#fcf3e6]" title="復古黃" id="btn-theme-sepia"></button>
+                                        <button onclick="updatePrefBgTheme('dark')" class="w-8 h-8 rounded-full border-2 bg-slate-800" title="暗黑夜" id="btn-theme-dark"></button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex flex-col justify-between">
+                                <span class="text-xs font-semibold text-slate-400 mb-1 block">即時範例預覽：</span>
+                                <div id="prefPreviewBox" class="p-4 rounded-xl border border-slate-200 shadow-sm h-32 overflow-y-auto text-slate-700 flex items-center justify-center font-serif leading-relaxed text-center bg-white">
+                                    這是一段 510小說網 閱讀器的排版預覽文字。您可以拉動字級與切換左方的背景主題，找到最舒服的閱讀體感！
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab Content: Shortcuts -->
+                    <div id="setPanel-shortcuts" class="space-y-6 hidden">
+                        <h4 class="text-base font-bold text-slate-800 border-l-4 border-indigo-500 pl-2">快速鍵自訂與繫結</h4>
+                        <p class="text-slate-400 text-xs mt-1">選取要綁定的功能欄位，接著直接在鍵盤上按下任一按鍵進行錄製。</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50 p-5 rounded-2xl border border-slate-100 text-sm">
+                            <div class="flex justify-between items-center py-1">
+                                <span class="font-semibold text-slate-700">上一章 (上一頁)</span>
+                                <div class="flex items-center space-x-1.5">
+                                    <button onclick="bindShortcutKey('prevChapter')" id="shortcutBtn-prevChapter" class="min-w-28 px-3 py-1.5 bg-white hover:bg-slate-100 border border-slate-200 rounded-xl text-xs font-mono font-bold text-indigo-600 shadow-sm transition">
+                                        ArrowLeft
+                                    </button>
+                                    <button onclick="clearShortcutKey('prevChapter')" class="p-1.5 bg-rose-50 hover:bg-rose-100 text-rose-500 rounded-lg transition" title="停用快捷鍵">✕</button>
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-between items-center py-1">
+                                <span class="font-semibold text-slate-700">下一章 (下一頁)</span>
+                                <div class="flex items-center space-x-1.5">
+                                    <button onclick="bindShortcutKey('nextChapter')" id="shortcutBtn-nextChapter" class="min-w-28 px-3 py-1.5 bg-white hover:bg-slate-100 border border-slate-200 rounded-xl text-xs font-mono font-bold text-indigo-600 shadow-sm transition">
+                                        ArrowRight
+                                    </button>
+                                    <button onclick="clearShortcutKey('nextChapter')" class="p-1.5 bg-rose-50 hover:bg-rose-100 text-rose-500 rounded-lg transition" title="停用快捷鍵">✕</button>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-between items-center py-1">
+                                <span class="font-semibold text-slate-700">開啟目錄</span>
+                                <div class="flex items-center space-x-1.5">
+                                    <button onclick="bindShortcutKey('toggleCatalog')" id="shortcutBtn-toggleCatalog" class="min-w-28 px-3 py-1.5 bg-white hover:bg-slate-100 border border-slate-200 rounded-xl text-xs font-mono font-bold text-indigo-600 shadow-sm transition">
+                                        m
+                                    </button>
+                                    <button onclick="clearShortcutKey('toggleCatalog')" class="p-1.5 bg-rose-50 hover:bg-rose-100 text-rose-500 rounded-lg transition" title="停用快捷鍵">✕</button>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-between items-center py-1">
+                                <span class="font-semibold text-slate-700">開啟設定</span>
+                                <div class="flex items-center space-x-1.5">
+                                    <button onclick="bindShortcutKey('openSettings')" id="shortcutBtn-openSettings" class="min-w-28 px-3 py-1.5 bg-white hover:bg-slate-100 border border-slate-200 rounded-xl text-xs font-mono font-bold text-indigo-600 shadow-sm transition">
+                                        s
+                                    </button>
+                                    <button onclick="clearShortcutKey('openSettings')" class="p-1.5 bg-rose-50 hover:bg-rose-100 text-rose-500 rounded-lg transition" title="停用快捷鍵">✕</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="flex justify-between items-center pt-4 border-t border-slate-100 mt-6 shrink-0">
-                    <span class="text-xs text-slate-400">變更設定將即時生效並儲存</span>
+                    <span class="text-xs text-slate-400">變更設定將即時生效並同步雲端儲存</span>
                     <button onclick="closePersonalSettingsModal()" class="md:hidden py-2 px-6 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-sm rounded-xl transition">
                         關閉
                     </button>
@@ -770,6 +960,7 @@
 
     <!-- ==================== 核心 JavaScript 處理代碼 ==================== -->
     <script>
+        // STREAMING_CHUNK: Initializing Global State and Default Novel Data
         const defaultNovels = [
             {
                 id: "novel-510-daily",
@@ -791,12 +982,12 @@
                     {
                         id: "chap-510-3",
                         title: "第三章：跌倒意外與怪北北的關心",
-                        content: "[場景：五年10班教室 / 第二節大下課]\n\n下課時間，謝易霖在走廊上興奮地玩著棒球手套，一不小心跟別人大擦撞，整個人慘摔跌在地上。許晞本看到，第一時間整個人「飛」過去看他怎麼樣。\n\n許晞本（緊緊抓住謝易霖的手臂，滿臉怪北北的眼神看著他）：\n「欸你還好嗎？要不要去健康中心？手斷了嗎？如果斷了，怎麼做專題研究啊？我們還要做喇叭欸！」\n\n謝易霖（一邊黑線地站起來，拍拍灰塵）：\n「……許晞本我只是跌倒，不要詛咒我好不好！」"
+                        content: "[場景：五年10班教室 / 第二節大下課]\n\n下課時間，謝易霖在走廊上興奮地玩著棒球手套，一不小心跟別人大擦撞，整個人慘摔跌在地上。許晞本看到，第一時間整個人「飛」過去看他怎麼樣。\n\n\n許晞本（緊緊抓住謝易霖的手臂，滿臉怪北北的眼神看著他）：\n「欸你還好嗎？要不要去健康中心？手斷了嗎？如果斷了，怎麼做專題研究啊？我們還要做喇叭欸！」\n\n謝易霖（一邊黑線地站起來，拍拍灰塵）：\n「……許晞本า只是跌倒，不要詛咒我好不好！」"
                     },
                     {
                         id: "chap-510-4",
                         title: "第四章：外套風波與這就是 510！",
-                        content: "起身後，旁邊的宋家和眼神突然瞄到教室中央。曹棋棋跟葉筳榆正靠在一起聊天（耍gay 內心:沒事）。宋家和立刻撥了撥瀏海，開啟「耍帥模式」大步走過去。\n\n宋家和（直接湊到曹棋棋邊，故意壓低聲音）：\n「棋棋姐姐，借我課本……」\n\n話還沒說完，宋家和居然直接伸手拿起曹棋棋掛在椅子上的外套，當著大家的面直接穿了上去！\n\n周圍的男生瞬間爆出雷鳴般的起鬨聲：\n「喔————！！又來了！宋家和又在穿她外套了ㄟ！帥喔!（誤）」\n\n曹棋棋（站在旁邊，滿臉無語）：\n「宋家和！！！你不要又穿我外套好不好，我都洗過很多件了……」\n\n許晞本（在旁邊三八步，再度露出怪北北的表情）：\n「宋家和，你好像把她穿過的都穿了，而且她說這件好像是她姊的QQ。」\n\n葉筳榆（也著曹棋棋一起翻白眼，無奈地說）：\n「宋家和，全班都知道你喜歡她啦！但你真的很噁欸，上次你體育課喝她水壺，她還沒管你欸！」\n\n宋家和完全沒有要理葉筳榆的意思，當作沒聽到，自顧自的跑去找其他男生聊天了。\n\n\n【尾聲：這就是510！】\n\n午後金黃色的夕陽斜斜地照進新北市中和區復興國小五年 10 班的窗戶。\n\n這就是屬於這群朋友們最真實、最精彩的日常——有連勝和落敗的電競恩怨、有怪北北的關心眼神、有不小心在黑板上留下的記號、有五分鐘神速吃完的午餐，還有那個全班皆知、每天樂此不疲的外套大八卦。\n\n（全劇終）"
+                        content: "起身後，旁邊的宋家和眼神突然瞄到教室中央。曹棋棋跟葉筳榆正靠在一起聊天（耍gay 內心:沒事）。宋家和立刻撥了撥瀏海，開啟「耍帥模式」大步走過去。\n\n宋家和（直接湊到曹棋棋邊，故意壓低聲音）：\n「棋棋姐姐，借我課本……」\n\n話還沒說完，宋家和居然直接伸手拿起曹棋棋掛在椅子上的外套，當著大家的面直接穿了上去！\n\n周圍的男生瞬間爆出雷鳴般的起鬨聲：\n「喔————！！又來了！宋家和又在穿她外套了ㄟ！帥喔!（誤）」\n\n曹棋棋（站在旁邊，滿臉無語）：\n「宋家和！！！你不要又穿我外套好不好，我都洗過很多件了……」\n\n許晞本（在旁邊三八步，再度露出怪北北的表情）：\n「宋家和，你好像把她穿過的都穿了，而且她說這件好像是她姊的QQ。」\n\n葉筳榆（也著曹棋棋一起翻白眼，無奈地說）：\n「宋家和，全班都知道你喜歡她啦！但你真的很噁欸，上次你體育課喝她水壺，她還沒管你欸！」\n\n宋家和完全沒有要理葉筳榆的意思，當作沒聽到，自顧自的跑去找其他男生聊天了。\n\n\n【尾聲：這就是510！】\n\n午後金黃色的夕陽斜斜地照進新北市中和區復興國小五年 10 班的窗戶。\n\n這就是屬於這群朋友們最真實、最精彩的日常——有連勝和落敗的電競恩怨、有怪北北的關心眼神、有不小心在黑板上留下的記號、有五分鐘神速吃完的午餐，還有那個全班皆知、每天樂此不樂的外套大八卦。\n\n（全劇終）"
                     }
                 ]
             },
@@ -839,6 +1030,7 @@
             activeSettingsTab: 'account' // 偏好設定導覽
         };
 
+        // STREAMING_CHUNK: Setup Base Role Translations and Key Bindings
         const baseRoleTranslationMap = {
             "Reader": "讀者",
             "reader": "讀者",
@@ -859,14 +1051,18 @@
             prevChapter: "ArrowLeft",
             nextChapter: "ArrowRight",
             toggleCatalog: "m",
-            openSettings: "s"
+            openSettings: "s",
+            quickComment: "c"
         };
 
         // 預設個人偏好設定
         const defaultUserPreferences = {
-            fontSize: 18,
+            fontSize: 4, // 預設第 4 級 (18px)
             theme: "light",
-            customWelcomeMsg: "午安！今天也是適合閱讀的一天 ☀️",
+            arrival: true,
+            comments: true,
+            nickname: true,
+            role: false,
             shortcuts: { ...defaultShortcuts }
         };
 
@@ -1069,7 +1265,10 @@
             document.getElementById('loginModal').classList.remove('hidden');
         }
         function closeLoginModal() { document.getElementById('loginModal').classList.add('hidden'); }
+        
+        // STREAMING_CHUNK: Handle tab toggles between Login and Register
         function toggleLoginTab(tab) {
+            state.authTab = tab; // 🛠️ 關鍵 Bug 修正：在這裡直接更新狀態，確保系統知道當前是在「註冊」還是「登入」！
             const loginBtn = document.getElementById('modalTab-login');
             const registerBtn = document.getElementById('modalTab-register');
             const nicknameGroup = document.getElementById('registerNicknameGroup');
@@ -1122,7 +1321,10 @@
                 if (foundUser) {
                     state.currentUser = foundUser;
                     sessionStorage.setItem('novel_active_user', JSON.stringify(foundUser));
-                    loadUserPreferences(); // 載入此使用者的個人設定
+                    
+                    // 🛡️ 登入成功後，立刻從雲端同步個人化設定與快捷鍵
+                    await fetchUserPrefsFromCloud(foundUser.email);
+                    
                     updateUserUI(); renderHomeNovels(); closeLoginModal();
                     
                     // 檢查到來通知偏好
@@ -1142,6 +1344,12 @@
                     if (res && res.status === "success") {
                         state.currentUser = res.user;
                         sessionStorage.setItem('novel_active_user', JSON.stringify(res.user));
+                        
+                        // 初始化全新的個人偏好設定
+                        const prefKey = `novel_pref_${newUser.email}`;
+                        localStorage.setItem(prefKey, JSON.stringify(defaultUserPreferences));
+                        await saveUserPrefsToCloud(); // 備份至雲端
+                        
                         users.push(newUser); localStorage.setItem('novel_users', JSON.stringify(users));
                         loadUserPreferences();
                         updateUserUI(); renderHomeNovels(); closeLoginModal();
@@ -1158,6 +1366,10 @@
                 }
                 users.push(newUser); localStorage.setItem('novel_users', JSON.stringify(users));
                 state.currentUser = newUser; sessionStorage.setItem('novel_active_user', JSON.stringify(newUser));
+                
+                const prefKey = `novel_pref_${newUser.email}`;
+                localStorage.setItem(prefKey, JSON.stringify(defaultUserPreferences));
+                
                 loadUserPreferences();
                 updateUserUI(); renderHomeNovels(); closeLoginModal();
                 if (getUserPref('arrival', true)) {
@@ -1281,7 +1493,7 @@
         }
         function scrollShelf(dir) { document.getElementById('novelShelf').scrollBy({ left: dir === 'left' ? -340 : 340, behavior: 'smooth' }); }
 
-        // ==================== 小說閱讀器 ====================
+        // ==================== 小說閱讀器與評論系統 ====================
         function startReading(novelId) {
             const novel = state.novels.find(n => n.id === novelId);
             if (!novel || !novel.chapters || novel.chapters.length === 0) { showAppAlert("即將推出", "此部作品目前尚未新增任何章節！", "📖"); return; }
@@ -1298,6 +1510,7 @@
             navigateTo('reader');
         }
 
+        // STREAMING_CHUNK: Render Novel Chapters and Load Preferences
         function renderReaderChapter() {
             const novel = state.novels.find(n => n.id === state.currentSelectedNovelId);
             const idx = state.currentSelectedChapterIndex;
@@ -1476,9 +1689,10 @@
             return urls;
         }
 
+        // STREAMING_CHUNK: Handle comment submission and privacy configurations
         async function submitChapterComment() {
             const content = document.getElementById('newCommentContent').value.trim();
-            if (!content) { showAppAlert("無法留言", "請先入您的評論內容！", "⚠️"); return; }
+            if (!content) { showAppAlert("無法留言", "請先輸入您的評論內容！", "⚠️"); return; }
 
             // 套用隱私偏好 (讓別人看見留言/暱稱/職位)
             const showComments = getUserPref('comments', true);
@@ -1703,6 +1917,7 @@
         }
 
         // ==================== 後台管理與作品編輯 ====================
+        // STREAMING_CHUNK: Handle permissions and chapters limitation
         function hasPermission(action) {
             if (!state.currentUser) return false;
             const role = state.currentUser.role;
@@ -2105,7 +2320,6 @@
                             showAppAlert("重製失敗", res ? res.message : "無法連結至雲端資料庫。", "❌");
                         }
                     } else {
-                        // 本機降級模式
                         const localUsers = JSON.parse(localStorage.getItem('novel_users')) || [];
                         const userIdx = localUsers.findIndex(u => u.email === email);
                         if (userIdx !== -1) {
@@ -2187,6 +2401,7 @@
         }
 
         // ==================== 👤 全體會員偏好設定控制 ====================
+        // STREAMING_CHUNK: Managing User Preferences and Syncing to Google Sheets
         function getUserPref(key, defaultVal) {
             if (!state.currentUser) return defaultVal;
             const prefKey = `novel_pref_${state.currentUser.email}`;
@@ -2235,7 +2450,6 @@
 
         function closePersonalSettingsModal() {
             document.getElementById('personalSettingsModal').classList.add('hidden');
-            // 關閉時若在閱讀頁面，即時重繪以套用最新字級背景
             if (state.activePage === 'reader') {
                 renderReaderChapter();
             }
@@ -2249,8 +2463,10 @@
                 if (el) {
                     if (t === tabId) {
                         el.className = "px-4 py-2.5 text-sm font-semibold rounded-xl text-left w-full transition text-indigo-600 bg-indigo-50/50 whitespace-nowrap";
+                        document.getElementById(`setPanel-${t}`).classList.remove('hidden');
                     } else {
                         el.className = "px-4 py-2.5 text-sm font-semibold rounded-xl text-left w-full transition text-slate-600 hover:bg-slate-100 whitespace-nowrap";
+                        document.getElementById(`setPanel-${t}`).classList.add('hidden');
                     }
                 }
             });
@@ -2258,235 +2474,48 @@
         }
 
         function renderSettingsContent() {
-            const container = document.getElementById('settingsContent');
-            if (!container) return;
-            container.innerHTML = '';
+            if (!state.currentUser) return;
+            
+            // 🛡️ 帳號面版資料綁定
+            document.getElementById('display-email').innerText = state.currentUser.email;
+            document.getElementById('display-nickname').innerText = state.currentUser.nickname;
+            document.getElementById('display-password').innerText = "•".repeat(state.currentUser.password ? state.currentUser.password.length : 8);
+            
+            // 🎭 隱私偏好狀態綁定
+            document.getElementById('prefArrival').checked = getUserPref('arrival', true);
+            document.getElementById('prefComments').checked = getUserPref('comments', true);
+            document.getElementById('prefNickname').checked = getUserPref('nickname', true);
+            document.getElementById('prefRole').checked = getUserPref('role', false);
+            
+            // 📖 閱讀喜好狀態綁定
+            const sizeLvl = getUserPref('fontSize', 4);
+            const bgTheme = getUserPref('theme', 'light');
+            document.getElementById('prefFontSizeSlider').value = sizeLvl;
+            document.getElementById('fontSizeLvlLabel').innerText = sizeLvl;
+            
+            // 邊框高亮目前選中的背景圓圈
+            const themes = ['light', 'eyecare', 'sepia', 'dark'];
+            themes.forEach(t => {
+                const btn = document.getElementById(`btn-theme-${t}`);
+                if (btn) {
+                    if (t === bgTheme) {
+                        btn.className = "w-8 h-8 rounded-full border-4 border-indigo-600 ring-4 ring-indigo-100 transition-all cursor-pointer";
+                    } else {
+                        btn.className = "w-8 h-8 rounded-full border border-slate-300 transition-all cursor-pointer";
+                    }
+                }
+            });
+            
+            // ⌨️ 快捷鍵配置狀態綁定
+            const shortcuts = getUserPref('shortcuts', { ...defaultShortcuts });
+            document.getElementById('shortcutBtn-prevChapter').innerText = shortcuts.prevChapter || '已停用';
+            document.getElementById('shortcutBtn-nextChapter').innerText = shortcuts.nextChapter || '已停用';
+            document.getElementById('shortcutBtn-toggleCatalog').innerText = shortcuts.toggleCatalog || '已停用';
+            document.getElementById('shortcutBtn-openSettings').innerText = shortcuts.openSettings || '已停用';
+            document.getElementById('shortcutBtn-quickComment').innerText = shortcuts.quickComment || '已停用';
 
-            if (state.activeSettingsTab === 'account') {
-                const passLen = state.currentUser.password ? state.currentUser.password.length : 8;
-                const asterisks = "•".repeat(passLen);
-                
-                container.innerHTML = `
-                    <div class="space-y-4">
-                        <h4 class="text-base font-bold text-slate-800 border-l-4 border-indigo-500 pl-2">帳號與安全</h4>
-                        
-                        <div class="space-y-4 bg-slate-50 p-5 rounded-2xl border border-slate-100 text-sm">
-                            <!-- 電子信箱 -->
-                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 pb-3 border-b border-slate-200/50">
-                                <div>
-                                    <span class="text-slate-400 text-xs block">目前帳號 (Email)</span>
-                                    <span class="font-bold text-slate-700 text-sm">${state.currentUser.email}</span>
-                                </div>
-                                <button onclick="toggleSettingForm('email')" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-bold text-xs px-3 py-2 rounded-xl transition self-start md:self-auto">變更帳號</button>
-                            </div>
-                            <div id="form-email" class="hidden p-4 bg-white rounded-xl border border-slate-200/60 space-y-3">
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-500 mb-1">新電子信箱</label>
-                                    <input id="setNewEmail" type="email" placeholder="example@gmail.com" class="w-full p-2.5 border rounded-xl text-xs focus:ring-2 focus:ring-indigo-500">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-500 mb-1">請輸入目前密碼進行驗證</label>
-                                    <input id="setEmailVerifyPass" type="password" placeholder="請輸入原密碼" class="w-full p-2.5 border rounded-xl text-xs focus:ring-2 focus:ring-indigo-500">
-                                </div>
-                                <button onclick="submitChangeEmail()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-4 py-2 rounded-lg transition">確認變更</button>
-                            </div>
-                            
-                            <!-- 登入密碼 -->
-                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 pb-3 border-b border-slate-200/50">
-                                <div>
-                                    <span class="text-slate-400 text-xs block">目前密碼</span>
-                                    <span class="font-mono text-lg text-slate-700 font-bold tracking-widest">${asterisks}</span>
-                                </div>
-                                <button onclick="toggleSettingForm('password')" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-bold text-xs px-3 py-2 rounded-xl transition self-start md:self-auto">變更密碼</button>
-                            </div>
-                            <div id="form-password" class="hidden p-4 bg-white rounded-xl border border-slate-200/60 space-y-3">
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-500 mb-1">原密碼</label>
-                                    <input id="setOldPass" type="password" placeholder="請輸入目前的舊密碼" class="w-full p-2.5 border rounded-xl text-xs focus:ring-2 focus:ring-indigo-500">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-500 mb-1">新密碼</label>
-                                    <input id="setNewPass" type="password" placeholder="請輸入新密碼" class="w-full p-2.5 border rounded-xl text-xs focus:ring-2 focus:ring-indigo-500">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-500 mb-1">確認新密碼</label>
-                                    <input id="setConfirmNewPass" type="password" placeholder="請再次輸入新密碼進行確認" class="w-full p-2.5 border rounded-xl text-xs focus:ring-2 focus:ring-indigo-500">
-                                </div>
-                                <button onclick="submitChangePassword()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-4 py-2 rounded-lg transition">確認變更</button>
-                            </div>
-
-                            <!-- 暱稱 -->
-                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
-                                <div>
-                                    <span class="text-slate-400 text-xs block">目前顯示暱稱</span>
-                                    <span class="font-bold text-slate-700 text-sm">${state.currentUser.nickname}</span>
-                                </div>
-                                <button onclick="toggleSettingForm('nickname')" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-bold text-xs px-3 py-2 rounded-xl transition self-start md:self-auto">變更暱稱</button>
-                            </div>
-                            <div id="form-nickname" class="hidden p-4 bg-white rounded-xl border border-slate-200/60 space-y-3">
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-500 mb-1">新顯示暱稱</label>
-                                    <input id="setNewNickname" type="text" placeholder="請輸入新暱稱" class="w-full p-2.5 border rounded-xl text-xs focus:ring-2 focus:ring-indigo-500" value="${state.currentUser.nickname}">
-                                </div>
-                                <button onclick="submitChangeNickname()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-4 py-2 rounded-lg transition">確認變更</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            } else if (state.activeSettingsTab === 'preferences') {
-                const arrival = getUserPref('arrival', true);
-                const comments = getUserPref('comments', true);
-                const nickname = getUserPref('nickname', true);
-                const role = getUserPref('role', false);
-
-                container.innerHTML = `
-                    <div class="space-y-4">
-                        <h4 class="text-base font-bold text-slate-800 border-l-4 border-indigo-500 pl-2">隱私權與呈現設定</h4>
-                        
-                        <div class="space-y-4 bg-slate-50 p-5 rounded-2xl border border-slate-100 text-sm">
-                            <label class="flex items-center justify-between cursor-pointer py-1">
-                                <div>
-                                    <span class="font-bold text-slate-700 block">讓別人看見你的到來 (歡迎與離別通知)</span>
-                                    <span class="text-xs text-slate-400 block mt-0.5">開啟後，您的登入與登出事件將會觸發全站通知</span>
-                                </div>
-                                <input type="checkbox" id="prefArrival" class="rounded text-indigo-600 focus:ring-indigo-500 w-5 h-5 cursor-pointer" ${arrival ? 'checked' : ''} onchange="savePrefSetting('arrival', this.checked)">
-                            </label>
-                            <hr class="border-slate-200/60">
-                            
-                            <label class="flex items-center justify-between cursor-pointer py-1">
-                                <div>
-                                    <span class="font-bold text-slate-700 block">讓別人看見你的留言</span>
-                                    <span class="text-xs text-slate-400 block mt-0.5">關閉後，您的新增評論將以匿名身分顯示</span>
-                                </div>
-                                <input type="checkbox" id="prefComments" class="rounded text-indigo-600 focus:ring-indigo-500 w-5 h-5 cursor-pointer" ${comments ? 'checked' : ''} onchange="savePrefSetting('comments', this.checked)">
-                            </label>
-                            <hr class="border-slate-200/60">
-                            
-                            <label class="flex items-center justify-between cursor-pointer py-1">
-                                <div>
-                                    <span class="font-bold text-slate-700 block">讓別人看見你的暱稱</span>
-                                    <span class="text-xs text-slate-400 block mt-0.5">關閉後，他人看見您的評論或通知時皆顯示為匿名</span>
-                                </div>
-                                <input type="checkbox" id="prefNickname" class="rounded text-indigo-600 focus:ring-indigo-500 w-5 h-5 cursor-pointer" ${nickname ? 'checked' : ''} onchange="savePrefSetting('nickname', this.checked)">
-                            </label>
-                            <hr class="border-slate-200/60">
-                            
-                            <label class="flex items-center justify-between cursor-pointer py-1">
-                                <div>
-                                    <span class="font-bold text-slate-700 block">讓別人看見你的職位</span>
-                                    <span class="text-xs text-slate-400 block mt-0.5">關閉後，您的評論下方將不顯示特殊身分徽章</span>
-                                </div>
-                                <input type="checkbox" id="prefRole" class="rounded text-indigo-600 focus:ring-indigo-500 w-5 h-5 cursor-pointer" ${role ? 'checked' : ''} onchange="savePrefSetting('role', this.checked)">
-                            </label>
-                        </div>
-                    </div>
-                `;
-            } else if (state.activeSettingsTab === 'reading') {
-                const sizeLvl = getUserPref('fontSize', 4);
-                const bgTheme = getUserPref('theme', 'light');
-
-                container.innerHTML = `
-                    <div class="space-y-4">
-                        <h4 class="text-base font-bold text-slate-800 border-l-4 border-indigo-500 pl-2">個人化閱讀器偏好</h4>
-                        
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 bg-slate-50 p-5 rounded-2xl border border-slate-100 text-sm">
-                            <div class="space-y-5">
-                                <div>
-                                    <label class="block font-bold text-slate-700 mb-1">字體大小等級 (1 ~ 10)</label>
-                                    <span class="text-xs text-slate-400 block mb-2">微調出最符合您視力健康與舒適度的閱讀字級</span>
-                                    <div class="flex items-center space-x-3">
-                                        <input type="range" id="prefFontSizeSlider" min="1" max="10" value="${sizeLvl}" class="flex-grow accent-indigo-600 cursor-pointer" oninput="updateFontSizePreview(this.value)">
-                                        <span id="fontSizeLvlLabel" class="font-bold text-indigo-600 text-lg w-6 text-center">${sizeLvl}</span>
-                                    </div>
-                                </div>
-                                
-                                <div>
-                                    <label class="block font-bold text-slate-700 mb-2">閱讀器背景顏色主題</label>
-                                    <!-- 採用 image_328e1d.png 的四色樣式設計 -->
-                                    <div class="flex space-x-3 items-center">
-                                        <button onclick="updatePrefBgTheme('light')" class="w-8 h-8 rounded-full border-2 ${bgTheme === 'light' ? 'border-indigo-600 ring-4 ring-indigo-100' : 'border-slate-300'} bg-white" title="明亮白"></button>
-                                        <button onclick="updatePrefBgTheme('eyecare')" class="w-8 h-8 rounded-full border-2 ${bgTheme === 'eyecare' ? 'border-indigo-600 ring-4 ring-indigo-100' : 'border-amber-300'} bg-[#f4ecd8]" title="護眼綠"></button>
-                                        <button onclick="updatePrefBgTheme('sepia')" class="w-8 h-8 rounded-full border-2 ${bgTheme === 'sepia' ? 'border-indigo-600 ring-4 ring-indigo-100' : 'border-orange-300'} bg-[#fcf3e6]" title="復古黃"></button>
-                                        <button onclick="updatePrefBgTheme('dark')" class="w-8 h-8 rounded-full border-2 ${bgTheme === 'dark' ? 'border-indigo-600 ring-4 ring-indigo-100' : 'border-slate-700'} bg-slate-800" title="暗黑夜"></button>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- 預覽實例效果 -->
-                            <div class="flex flex-col justify-between">
-                                <span class="text-xs font-semibold text-slate-400 mb-1 block">即時範例預覽：</span>
-                                <div id="prefPreviewBox" class="p-4 rounded-xl border border-slate-200/60 shadow-sm h-32 overflow-y-auto text-slate-700 flex items-center justify-center font-serif leading-relaxed text-center">
-                                    這是一段 510小說網 閱讀器的排版預覽文字。您可以拉動字級與切換左方的背景主題，找到最舒服的閱讀體感！
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                // 立即渲染預覽
-                updateFontSizePreview(sizeLvl);
-                applyPrefBgThemePreview(bgTheme);
-            } else if (state.activeSettingsTab === 'shortcuts') {
-                const shortcuts = getUserPref('shortcuts', { ...defaultShortcuts });
-
-                container.innerHTML = `
-                    <div class="space-y-4">
-                        <h4 class="text-base font-bold text-slate-800 border-l-4 border-indigo-500 pl-2">快速鍵自訂與繫結</h4>
-                        <p class="text-slate-400 text-xs mt-1">選取要綁定的功能欄位，接著直接在鍵盤上按下任一按鍵進行錄製。</p>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50 p-5 rounded-2xl border border-slate-100 text-sm">
-                            <div class="flex justify-between items-center py-1">
-                                <span class="font-semibold text-slate-700">上一章 (上一頁)</span>
-                                <div class="flex items-center space-x-1.5">
-                                    <button onclick="bindShortcutKey('prevChap')" id="shortcutBtn-prevChap" class="min-w-28 px-3 py-1.5 bg-white hover:bg-slate-100 border border-slate-200 rounded-xl text-xs font-mono font-bold text-indigo-600 shadow-sm transition">
-                                        ${shortcuts.prevChap || '已停用'}
-                                    </button>
-                                    <button onclick="clearShortcutKey('prevChap')" class="p-1.5 bg-rose-50 hover:bg-rose-100 text-rose-500 rounded-lg transition" title="停用快捷鍵">✕</button>
-                                </div>
-                            </div>
-                            
-                            <div class="flex justify-between items-center py-1">
-                                <span class="font-semibold text-slate-700">下一章 (下一頁)</span>
-                                <div class="flex items-center space-x-1.5">
-                                    <button onclick="bindShortcutKey('nextChap')" id="shortcutBtn-nextChap" class="min-w-28 px-3 py-1.5 bg-white hover:bg-slate-100 border border-slate-200 rounded-xl text-xs font-mono font-bold text-indigo-600 shadow-sm transition">
-                                        ${shortcuts.nextChap || '已停用'}
-                                    </button>
-                                    <button onclick="clearShortcutKey('nextChap')" class="p-1.5 bg-rose-50 hover:bg-rose-100 text-rose-500 rounded-lg transition" title="停用快捷鍵">✕</button>
-                                </div>
-                            </div>
-
-                            <div class="flex justify-between items-center py-1">
-                                <span class="font-semibold text-slate-700">開啟目錄</span>
-                                <div class="flex items-center space-x-1.5">
-                                    <button onclick="bindShortcutKey('openDir')" id="shortcutBtn-openDir" class="min-w-28 px-3 py-1.5 bg-white hover:bg-slate-100 border border-slate-200 rounded-xl text-xs font-mono font-bold text-indigo-600 shadow-sm transition">
-                                        ${shortcuts.openDir || '已停用'}
-                                    </button>
-                                    <button onclick="clearShortcutKey('openDir')" class="p-1.5 bg-rose-50 hover:bg-rose-100 text-rose-500 rounded-lg transition" title="停用快捷鍵">✕</button>
-                                </div>
-                            </div>
-
-                            <div class="flex justify-between items-center py-1">
-                                <span class="font-semibold text-slate-700">開啟設定</span>
-                                <div class="flex items-center space-x-1.5">
-                                    <button onclick="bindShortcutKey('openSet')" id="shortcutBtn-openSet" class="min-w-28 px-3 py-1.5 bg-white hover:bg-slate-100 border border-slate-200 rounded-xl text-xs font-mono font-bold text-indigo-600 shadow-sm transition">
-                                        ${shortcuts.openSet || '已停用'}
-                                    </button>
-                                    <button onclick="clearShortcutKey('openSet')" class="p-1.5 bg-rose-50 hover:bg-rose-100 text-rose-500 rounded-lg transition" title="停用快捷鍵">✕</button>
-                                </div>
-                            </div>
-
-                            <div class="flex justify-between items-center py-1 md:col-span-2">
-                                <span class="font-semibold text-slate-700">快速定位至評論輸入框</span>
-                                <div class="flex items-center space-x-1.5">
-                                    <button onclick="bindShortcutKey('quickComment')" id="shortcutBtn-quickComment" class="min-w-28 px-3 py-1.5 bg-white hover:bg-slate-100 border border-slate-200 rounded-xl text-xs font-mono font-bold text-indigo-600 shadow-sm transition">
-                                        ${shortcuts.quickComment || '已停用'}
-                                    </button>
-                                    <button onclick="clearShortcutKey('quickComment')" class="p-1.5 bg-rose-50 hover:bg-rose-100 text-rose-500 rounded-lg transition" title="停用快捷鍵">✕</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }
+            updateFontSizePreview(sizeLvl);
+            applyPrefBgThemePreview(bgTheme);
         }
 
         function toggleSettingForm(formId) {
@@ -2513,7 +2542,6 @@
                 if (res && res.status === "error") { showAppAlert("更新失敗", res.message, "❌"); return; }
             }
 
-            // 更新本機
             const localUsers = JSON.parse(localStorage.getItem('novel_users')) || [];
             const idx = localUsers.findIndex(u => u.email === oldEmail);
             if (idx !== -1) {
@@ -2575,9 +2603,31 @@
             updateUserUI();
         }
 
+        // STREAMING_CHUNK: Cloud syncing for user preference options
+        async function saveUserPrefsToCloud() {
+            if (!state.currentUser || !state.systemSettings.gasUrl) return;
+            const prefKey = `novel_pref_${state.currentUser.email}`;
+            const prefs = JSON.parse(localStorage.getItem(prefKey)) || {};
+            await runCloudApi("saveUserPrefs", {
+                email: state.currentUser.email,
+                preferences: JSON.stringify(prefs)
+            });
+        }
+
+        async function fetchUserPrefsFromCloud(email) {
+            if (!email || !state.systemSettings.gasUrl) return;
+            const res = await runCloudApi("getUserPrefs", { email: email });
+            if (res && res.status === "success" && res.preferences) {
+                const prefKey = `novel_pref_${email}`;
+                localStorage.setItem(prefKey, res.preferences);
+                loadUserPreferences();
+            }
+        }
+
         function savePrefSetting(key, val) {
             setUserPref(key, val);
             showToast("⚙️ 設定儲存", `隱私偏好【${key}】已變更並儲存！`, "🔒");
+            saveUserPrefsToCloud();
         }
 
         function updateFontSizePreview(value) {
@@ -2589,12 +2639,14 @@
             if (preview) {
                 preview.style.fontSize = getFontSizePx(value);
             }
+            saveUserPrefsToCloud();
         }
 
         function updatePrefBgTheme(theme) {
             setUserPref('theme', theme);
             applyPrefBgThemePreview(theme);
             renderSettingsContent();
+            saveUserPrefsToCloud();
         }
 
         function applyPrefBgThemePreview(theme) {
@@ -2632,6 +2684,7 @@
             setUserPref('shortcuts', shortcuts);
             renderSettingsContent();
             showToast("⌨️ 快捷鍵移除", `已成功清除該功能的快捷鍵綁定。`, "🗑️");
+            saveUserPrefsToCloud();
         }
 
         function completeShortcutBind(keyboardKey) {
@@ -2644,18 +2697,17 @@
             setUserPref('shortcuts', shortcuts);
             renderSettingsContent();
             showToast("⌨️ 快捷鍵設定", `已將該功能與鍵盤【${keyboardKey}】綁定！`, "✨");
+            saveUserPrefsToCloud();
         }
 
         // 全域快速鍵核心偵測器
         window.addEventListener('keydown', function(event) {
-            // 如果當前正在錄製快速鍵
             if (activeBindingActionKey) {
                 event.preventDefault();
                 completeShortcutBind(event.key);
                 return;
             }
 
-            // 如果正在輸入留言或帳號等輸入框，不觸發快速鍵
             if (document.activeElement.tagName === "INPUT" || document.activeElement.tagName === "TEXTAREA") {
                 return;
             }
@@ -2663,42 +2715,27 @@
             if (!state.currentUser) return;
             const shortcuts = getUserPref('shortcuts', { ...defaultShortcuts });
 
-            // 1. 上一章
-            if (shortcuts.prevChap && event.key === shortcuts.prevChap) {
+            if (shortcuts.prevChapter && event.key === shortcuts.prevChapter) {
                 if (state.activePage === 'reader') {
                     event.preventDefault();
                     prevChapter();
                 }
             }
-            // 2. 下一章
-            else if (shortcuts.nextChap && event.key === shortcuts.nextChap) {
+            else if (shortcuts.nextChapter && event.key === shortcuts.nextChapter) {
                 if (state.activePage === 'reader') {
                     event.preventDefault();
                     nextChapter();
                 }
             }
-            // 3. 開啟目錄
-            else if (shortcuts.openDir && event.key === shortcuts.openDir) {
+            else if (shortcuts.toggleCatalog && event.key === shortcuts.toggleCatalog) {
                 if (state.activePage === 'reader') {
                     event.preventDefault();
                     toggleChapterListModal();
                 }
             }
-            // 4. 開啟設定
-            else if (shortcuts.openSet && event.key === shortcuts.openSet) {
+            else if (shortcuts.openSettings && event.key === shortcuts.openSettings) {
                 event.preventDefault();
                 openPersonalSettingsModal();
-            }
-            // 5. 定位評論輸入框
-            else if (shortcuts.quickComment && event.key === shortcuts.quickComment) {
-                if (state.activePage === 'reader') {
-                    event.preventDefault();
-                    const el = document.getElementById('newCommentContent');
-                    if (el) {
-                        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        el.focus();
-                    }
-                }
             }
         });
 
@@ -2716,6 +2753,7 @@
             document.getElementById('editNovelModal').classList.remove('hidden');
         }
 
+        // STREAMING_CHUNK: Handle post-editing logic for published novels
         function closeEditNovelModal() {
             document.getElementById('editNovelModal').classList.add('hidden');
         }
