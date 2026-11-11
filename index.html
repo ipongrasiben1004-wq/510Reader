@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <!-- STREAMING_CHUNK: Setting up HTML meta and Tailwind configuration -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📚 510小說網</title>
+    <title>📚 610小說網</title>
     <!-- 引入 Tailwind CSS 提供極致精美視覺 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -39,7 +38,7 @@
             <!-- Logo -->
             <div class="flex items-center space-x-2 cursor-pointer" onclick="navigateTo('home')">
                 <span class="text-2xl">📚</span>
-                <span class="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">510小說網</span>
+                <span class="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">610小說網</span>
             </div>
 
             <!-- 右側導覽資訊與控制項 -->
@@ -102,7 +101,7 @@
                 <div class="relative z-10 max-w-2xl space-y-4">
                     <span class="bg-indigo-500/30 text-indigo-300 text-xs font-bold px-3 py-1 rounded-full border border-indigo-400/30">精品原創小說平台</span>
                     <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">探索專屬於你的文字世界</h1>
-                    <p class="text-indigo-100 text-sm md:text-base">在這裡，每一部小說都是一場奇幻的冒險。歡迎來到510小說網，登入後即可享有個人化書籤與進度紀錄。</p>
+                    <p class="text-indigo-100 text-sm md:text-base">在這裡，每一部小說都是一場奇幻的冒險。歡迎來到610小說網，登入後即可享有個人化書籤與進度紀錄。</p>
                     <div class="flex space-x-3">
                         <button onclick="scrollToNovels()" class="bg-white text-indigo-900 hover:bg-slate-100 font-semibold text-sm px-5 py-2.5 rounded-xl shadow-md transition">立即閱讀</button>
                         <!-- 點擊加入會員，檢查登入並開啟專屬申請表 -->
@@ -709,7 +708,7 @@
                             <div class="flex flex-col justify-between">
                                 <span class="text-xs font-semibold text-slate-400 mb-1 block">即時範例預覽：</span>
                                 <div id="prefPreviewBox" class="p-4 rounded-xl border border-slate-200 shadow-sm h-32 overflow-y-auto text-slate-700 flex items-center justify-center font-serif leading-relaxed text-center bg-white">
-                                    這是一段 510小說網 閱讀器的排版預覽文字。您可以拉動字級與切換左方的背景主題，找到最舒服的閱讀體感！
+                                    這是一段 610小說網 閱讀器的排版預覽文字。您可以拉動字級與切換左方的背景主題，找到最舒服的閱讀體感！
                                 </div>
                             </div>
                         </div>
@@ -960,34 +959,33 @@
 
     <!-- ==================== 核心 JavaScript 處理代碼 ==================== -->
     <script>
-        // STREAMING_CHUNK: Initializing Global State and Default Novel Data
         const defaultNovels = [
             {
-                id: "novel-510-daily",
-                title: "510教室的日常：午餐趣事&八卦小站",
-                author: "510觀察員",
+                id: "novel-610-daily",
+                title: "610教室的日常：午餐趣事&八卦小站",
+                author: "610觀察員",
                 cover: "🏫",
                 description: "新北市中和區復興國小五年10班最精采好笑的每日生活！從午餐盛飯隊伍的電競爭霸、小少少的黑板危機，到大下課傳遍全班的『外套』浪漫八卦，帶你一同體驗青春無敵的課堂歲月！",
                 chapters: [
                     {
-                        id: "chap-510-1",
+                        id: "chap-610-1",
                         title: "第一章：盛飯隊伍的電競爭鋒",
                         content: "[場景：復興國小 五年10班教室 / 後方盛飯區]\n\n午餐鐘聲響起，全班排成一條長龍不分男女混在一起。宋家和拿著碗排在隊伍裡，想起昨晚的戰績，忍不住大聲抱怨：\n\n宋家和：\n「唉，昨天被桂哥打爆，他是外掛吧……」\n\n排在宋家和後面的1號許晞本手裡拿著碗，對著宋家和翻了一個大白眼，直接開始瘋狂諷刺：\n\n許晞本：\n「宋家和，你自己也知道自己的實力，被我打到5:3，那三分都賽到的，不要在那邊『炫耀』你的好成績 :)」\n\n宋家和：\n「許晞本！你被我打贏3分之後直接拿噴火槍彈弓打我，那麼弱不要說話啦！明天跟我單挑啊！~」"
                     },
                     {
-                        id: "chap-510-2",
+                        id: "chap-610-2",
                         title: "第二章：黑板危機與裝菜小山",
                         content: "這時，排在更後面的6號桂祥騰一臉興奮地伸長脖子大喊：\n「單挑？你確定嗎？你連我都打不過。上次說要抱曹棋棋已經放過你了，我跟你單挑你被5:1，而且我可沒有學許晞本拿噴火槍（我沒有）。不過我還是去玩《三角洲》比較好，《競爭者》爛爆了！」\n\n許晞本一聽，趕緊小聲點了一下桂祥騰叫他安靜。直到兩個人轉頭看向黑板，才發現上面不知道什麼時候已經被小少少記了 6 x 5 跟 12 x 2。大家馬上閉嘴，瞬間安靜了下來……\n\n此時，輪到曹棋棋裝飯。她拿飯匙裝了億點點飯、裝了一顆蛋、裝了半根蔬菜，然後就迅速回到座位拿她的湯碗，裝了億點點湯。前後花不到5分鐘，就把午餐解決了。\n\n曹棋棋：\n「今天這菜 hon 難吃，所以裝半根就好。」\n\n排在旁邊的葉筳榆看著曹棋棋的碗，表示無語：\n「你每次都裝這麼少，等一下真的不會餓嗎？」\n\n另一邊，桂祥騰端著他那只有薄薄一層底部白飯、連一片菜葉都沒有的碗，湊到謝易霖旁邊突然冒句：\n「欸，謝易霖，你到底有沒有玩三角洲啊？」\n\n謝易霖（一邊吃飯一邊翻白眼）：\n「哥們你排隊盛飯也可以扯到三角洲，然後你是不是沒裝菜，給我回去裝菜啦！」\n\n最後輪到許晞本，他看著剩下的菜，開始瘋狂把大陸妹 and A菜往自己盤子裡塞，堆得像一座小山，最後擺上一顆搖墜的茶葉蛋。\n\n宋家和：\n「開玩笑，許晞本，你確定裝這麼多嗎？」\n\n許晞本:\n「不然呢？」"
                     },
                     {
-                        id: "chap-510-3",
+                        id: "chap-610-3",
                         title: "第三章：跌倒意外與怪北北的關心",
                         content: "[場景：五年10班教室 / 第二節大下課]\n\n下課時間，謝易霖在走廊上興奮地玩著棒球手套，一不小心跟別人大擦撞，整個人慘摔跌在地上。許晞本看到，第一時間整個人「飛」過去看他怎麼樣。\n\n\n許晞本（緊緊抓住謝易霖的手臂，滿臉怪北北的眼神看著他）：\n「欸你還好嗎？要不要去健康中心？手斷了嗎？如果斷了，怎麼做專題研究啊？我們還要做喇叭欸！」\n\n謝易霖（一邊黑線地站起來，拍拍灰塵）：\n「……許晞本า只是跌倒，不要詛咒我好不好！」"
                     },
                     {
-                        id: "chap-510-4",
-                        title: "第四章：外套風波與這就是 510！",
-                        content: "起身後，旁邊的宋家和眼神突然瞄到教室中央。曹棋棋跟葉筳榆正靠在一起聊天（耍gay 內心:沒事）。宋家和立刻撥了撥瀏海，開啟「耍帥模式」大步走過去。\n\n宋家和（直接湊到曹棋棋邊，故意壓低聲音）：\n「棋棋姐姐，借我課本……」\n\n話還沒說完，宋家和居然直接伸手拿起曹棋棋掛在椅子上的外套，當著大家的面直接穿了上去！\n\n周圍的男生瞬間爆出雷鳴般的起鬨聲：\n「喔————！！又來了！宋家和又在穿她外套了ㄟ！帥喔!（誤）」\n\n曹棋棋（站在旁邊，滿臉無語）：\n「宋家和！！！你不要又穿我外套好不好，我都洗過很多件了……」\n\n許晞本（在旁邊三八步，再度露出怪北北的表情）：\n「宋家和，你好像把她穿過的都穿了，而且她說這件好像是她姊的QQ。」\n\n葉筳榆（也著曹棋棋一起翻白眼，無奈地說）：\n「宋家和，全班都知道你喜歡她啦！但你真的很噁欸，上次你體育課喝她水壺，她還沒管你欸！」\n\n宋家和完全沒有要理葉筳榆的意思，當作沒聽到，自顧自的跑去找其他男生聊天了。\n\n\n【尾聲：這就是510！】\n\n午後金黃色的夕陽斜斜地照進新北市中和區復興國小五年 10 班的窗戶。\n\n這就是屬於這群朋友們最真實、最精彩的日常——有連勝和落敗的電競恩怨、有怪北北的關心眼神、有不小心在黑板上留下的記號、有五分鐘神速吃完的午餐，還有那個全班皆知、每天樂此不樂的外套大八卦。\n\n（全劇終）"
+                        id: "chap-610-4",
+                        title: "第四章：外套風波與這就是 610！",
+                        content: "起身後，旁邊的宋家和眼神突然瞄到教室中央。曹棋棋跟葉筳榆正靠在一起聊天（耍gay 內心:沒事）。宋家和立刻撥了撥瀏海，開啟「耍帥模式」大步走過去。\n\n宋家和（直接湊到曹棋棋邊，故意壓低聲音）：\n「棋棋姐姐，借我課本……」\n\n話還沒說完，宋家和居然直接伸手拿起曹棋棋掛在椅子上的外套，當著大家的面直接穿了上去！\n\n周圍的男生瞬間爆出雷鳴般的起鬨聲：\n「喔————！！又來了！宋家和又在穿她外套了ㄟ！帥喔!（誤）」\n\n曹棋棋（站在旁邊，滿臉無語）：\n「宋家和！！！你不要又穿我外套好不好，我都洗過很多件了……」\n\n許晞本（在旁邊三八步，再度露出怪北北的表情）：\n「宋家和，你好像把她穿過的都穿了，而且她說這件好像是她姊的QQ。」\n\n葉筳榆（也著曹棋棋一起翻白眼，無奈地說）：\n「宋家和，全班都知道你喜歡她啦！但你真的很噁欸，上次你體育課喝她水壺，她還沒管你欸！」\n\n宋家和完全沒有要理葉筳榆的意思，當作沒聽到，自顧自的跑去找其他男生聊天了。\n\n\n【尾聲：這就是610！】\n\n午後金黃色的夕陽斜斜地照進新北市中和區復興國小五年 10 班的窗戶。\n\n這就是屬於這群朋友們最真實、最精彩的日常——有連勝和落敗的電競恩怨、有怪北北的關心眼神、有不小心在黑板上留下的記號、有五分鐘神速吃完的午餐，還有那個全班皆知、每天樂此不樂的外套大八卦。\n\n（全劇終）"
                     }
                 ]
             },
@@ -1009,7 +1007,7 @@
 
         const defaultSystemSettings = {
             welcomeChannel: "#welcome-room",
-            welcomeMsg: "🎉 歡迎 {user} 加入510小說網！願我們在書香與文字的世界裡找到共鳴。",
+            welcomeMsg: "🎉 歡迎 {user} 加入610小說網！願我們在書香與文字的世界裡找到共鳴。",
             farewellChannel: "#bye-bye",
             farewellMsg: "👋 {user} 暫時離開了我們，沒關係！我們會在這裡靜靜等候你的下一次造訪。",
             siteNoticeText: "🔥 限時福利：所有人免費會員3分鐘!!!",
@@ -1030,7 +1028,6 @@
             activeSettingsTab: 'account' // 偏好設定導覽
         };
 
-        // STREAMING_CHUNK: Setup Base Role Translations and Key Bindings
         const baseRoleTranslationMap = {
             "Reader": "讀者",
             "reader": "讀者",
@@ -1144,7 +1141,7 @@
             const storedNovels = localStorage.getItem('novel_novels_data');
             if (storedNovels) {
                 const parsed = JSON.parse(storedNovels);
-                if (!parsed.some(n => n.id === "novel-510-daily")) {
+                if (!parsed.some(n => n.id === "novel-610-daily")) {
                     state.novels = defaultNovels;
                     localStorage.setItem('novel_novels_data', JSON.stringify(defaultNovels));
                 } else {
@@ -1266,7 +1263,6 @@
         }
         function closeLoginModal() { document.getElementById('loginModal').classList.add('hidden'); }
         
-        // STREAMING_CHUNK: Handle tab toggles between Login and Register
         function toggleLoginTab(tab) {
             state.authTab = tab; // 🛠️ 關鍵 Bug 修正：在這裡直接更新狀態，確保系統知道當前是在「註冊」還是「登入」！
             const loginBtn = document.getElementById('modalTab-login');
@@ -1329,7 +1325,7 @@
                     
                     // 檢查到來通知偏好
                     if (getUserPref('arrival', true)) {
-                        showToast("📢 系統登入", `${foundUser.nickname}，歡迎回到510小說網！`, "🎉");
+                        showToast("📢 系統登入", `${foundUser.nickname}，歡迎回到610小說網！`, "🎉");
                     }
                 } else {
                     showAppAlert("登入失敗", "帳號或密碼有誤！(若雲端已註冊，請確保後台 API 網址已綁定正確)", "❌");
@@ -1510,7 +1506,6 @@
             navigateTo('reader');
         }
 
-        // STREAMING_CHUNK: Render Novel Chapters and Load Preferences
         function renderReaderChapter() {
             const novel = state.novels.find(n => n.id === state.currentSelectedNovelId);
             const idx = state.currentSelectedChapterIndex;
@@ -1689,7 +1684,6 @@
             return urls;
         }
 
-        // STREAMING_CHUNK: Handle comment submission and privacy configurations
         async function submitChapterComment() {
             const content = document.getElementById('newCommentContent').value.trim();
             if (!content) { showAppAlert("無法留言", "請先輸入您的評論內容！", "⚠️"); return; }
@@ -1824,7 +1818,7 @@
             "水桶粉絲": ["🤝 成為 wenio0509 的好友", "✨ 獲得 666666 的宋家和簽名", "💖 非常感謝您的支持！"],
             "帥霖粉絲": ["😎 獲得 okok 的謝易霖簽名", "📖 擁有請求添加全新小說的權力"],
             "瑋瑋鄰居": ["🏠 非常非常感謝你", "✍️ 可以直接新增與編輯小說"],
-            "八卦小孩": ["👑 無庸置疑的最高身分，掌握 510 第一手秘辛情報"]
+            "八卦小孩": ["👑 無庸置疑的最高身分，掌握 610 第一手秘辛情報"]
         };
         const tierOrder = ["藍貓粉絲", "水桶粉絲", "帥霖粉絲", "瑋瑋鄰居", "八卦小孩"];
 
@@ -1917,7 +1911,6 @@
         }
 
         // ==================== 後台管理與作品編輯 ====================
-        // STREAMING_CHUNK: Handle permissions and chapters limitation
         function hasPermission(action) {
             if (!state.currentUser) return false;
             const role = state.currentUser.role;
@@ -2084,7 +2077,7 @@
         function applyNoticeSetting() {
             const s = state.systemSettings;
             if (s) {
-                document.getElementById('headerAnnouncement').innerText = s.siteNoticeText || "歡迎來到510小說網！";
+                document.getElementById('headerAnnouncement').innerText = s.siteNoticeText || "歡迎來到610小說網！";
                 if (s.siteNoticeActive === "true" && s.siteNoticeText) { document.getElementById('siteNoticeBar').classList.remove('hidden'); document.getElementById('siteNoticeText').innerText = s.siteNoticeText; } 
                 else { document.getElementById('siteNoticeBar').classList.add('hidden'); }
             }
@@ -2401,7 +2394,6 @@
         }
 
         // ==================== 👤 全體會員偏好設定控制 ====================
-        // STREAMING_CHUNK: Managing User Preferences and Syncing to Google Sheets
         function getUserPref(key, defaultVal) {
             if (!state.currentUser) return defaultVal;
             const prefKey = `novel_pref_${state.currentUser.email}`;
@@ -2603,7 +2595,6 @@
             updateUserUI();
         }
 
-        // STREAMING_CHUNK: Cloud syncing for user preference options
         async function saveUserPrefsToCloud() {
             if (!state.currentUser || !state.systemSettings.gasUrl) return;
             const prefKey = `novel_pref_${state.currentUser.email}`;
@@ -2753,7 +2744,6 @@
             document.getElementById('editNovelModal').classList.remove('hidden');
         }
 
-        // STREAMING_CHUNK: Handle post-editing logic for published novels
         function closeEditNovelModal() {
             document.getElementById('editNovelModal').classList.add('hidden');
         }
